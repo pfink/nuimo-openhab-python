@@ -1,5 +1,7 @@
-import nuimo
 import math
+
+import nuimo
+
 
 class AppListener(nuimo.ControllerListener):
     def __init__(self, app):

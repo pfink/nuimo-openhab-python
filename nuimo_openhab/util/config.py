@@ -1,6 +1,7 @@
-import yaml
 import os
 import sys
+
+import yaml
 
 NUIMO_OPENHAB_CONFIG_PATH = os.getenv('NUIMO_OPENHAB_CONFIG_PATH', 'config.yml')
 
