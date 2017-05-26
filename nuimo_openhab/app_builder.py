@@ -1,7 +1,6 @@
-from nuimo_openhab_controller.nuimomenue.model import *
-from nuimo_openhab_controller.openhab.openhab_listener import *
-import nuimo
-from openhab import openHAB
+from nuimo_menue.model import *
+from nuimo_openhab.listener import *
+
 
 class OpenHabAppBuilder:
     def buildApps(self, openhab : openHAB):

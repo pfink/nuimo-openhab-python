@@ -1,6 +1,9 @@
-import nuimo
-from nuimo_openhab_controller.nuimomenue.model import NuimoMenue
 import time
+
+import nuimo
+
+from nuimo_menue.model import NuimoMenue
+
 
 class NuimoMenueControllerListener(nuimo.ControllerListener):
     def __init__(self, nuimoMenue: NuimoMenue):
@@ -36,6 +39,6 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
         print("Nuimo disconnected!")
 
     def attempt_reconnect(self):
-        while(not self.connected):
+        while (not self.connected):
             time.sleep(5)
             self.nuimoMenue.reconnect()

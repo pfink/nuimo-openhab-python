@@ -1,12 +1,14 @@
-import nuimo
-from  nuimo_openhab_controller import nuimomenue
-import requests
 import sys
-from openhab import openHAB
-import requests
-from nuimo_openhab_controller import config
 
-class OpenHabItemListener(nuimomenue.model.AppListener):
+import nuimo
+import requests
+from openhab import openHAB
+
+import nuimo_menue
+from nuimo_openhab.util import config
+
+
+class OpenHabItemListener(nuimo_menue.model.AppListener):
 
     def __init__(self, openhab: openHAB):
         # Reminds changes that are too small to directly expose them

@@ -1,17 +1,9 @@
-from nuimo_openhab_controller.nuimomenue.listener import *
-from nuimo_openhab_controller.nuimomenue.model import *
-from nuimo_openhab_controller.openhab.openhab_listener import *
-from nuimo_openhab_controller.openhab.openhab_app_builder import *
-import time
-from nuimo_openhab_controller import config
-from openhab import openHAB
-
+from nuimo_menue.listener import *
+from nuimo_openhab.app_builder import *
+from nuimo_openhab.util import config
 
 openhab = openHAB(config["openhab_api_url"])
 apps = OpenHabAppBuilder().buildApps(openhab)
-
-
-
 
 manager = nuimo.ControllerManager(adapter_name='hci0')
 controller = nuimo.Controller(mac_address=config["nuimo_mac_address"], manager=manager)
