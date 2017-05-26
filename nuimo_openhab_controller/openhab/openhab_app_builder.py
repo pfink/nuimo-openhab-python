@@ -1,23 +1,15 @@
 from nuimo_openhab_controller.nuimomenue.model import *
 from nuimo_openhab_controller.openhab.openhab_listener import *
 import nuimo
-import requests
+from openhab import openHAB
 
 class OpenHabAppBuilder:
-    def buildApps(self):
+    def buildApps(self, openhab : openHAB):
         apps = []
-        nuimoGroupItem = requests.get("http://192.168.0.31:8080/rest/items/Nuimo").json()
+        nuimoGroupItem = openhab.req_get("/items/Nuimo")
         for nuimoItem in nuimoGroupItem["members"]:
             icon = nuimo.LedMatrix(
-                nuimoItem["label"] +
-                "         "
-                "         "
-                "         "
-                "         "
-                "   * *   "
-                "  *   *  "
-                " *     * "
-                "*       *"
+                nuimoItem["label"]
             )
-            apps.append(App(name=nuimoItem["name"], appListener=OpenHabItemListener(), icon=icon))
+            apps.append(App(name=nuimoItem["name"], appListener=OpenHabItemListener(openhab), icon=icon))
         return apps

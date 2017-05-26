@@ -25,7 +25,7 @@ class App:
 
     def showRotationState(self, percent):
         fullRotationString = str(
-            "   ***   "
+            "    *    "
             "  *   *  "
             " *     * "
             "*       *"
@@ -33,7 +33,7 @@ class App:
             "*       *"
             " *     * "
             "  *   *  "
-            "   ***   "
+            "    *   "
         )
         fullRotationIsCircular = True
         '''
@@ -128,4 +128,5 @@ class NuimoMenue:
         icon = self.getCurrentApp().getIcon()
         self.controller.display_matrix(matrix=self.getCurrentApp().getIcon())
 
-
+    def reconnect(self):
+        self.controller.connect()
