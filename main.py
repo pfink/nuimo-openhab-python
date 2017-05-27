@@ -5,7 +5,7 @@ from nuimo_openhab.util import config
 openhab = openHAB(config["openhab_api_url"])
 apps = OpenHabAppBuilder().buildApps(openhab)
 
-manager = nuimo.ControllerManager(adapter_name='hci0')
+manager = nuimo.ControllerManager(adapter_name=config["bluetooth_adapter"])
 
 class ControllerManagerDiscoveryListener(nuimo.ControllerManagerListener):
     def controller_discovered(self, controller):

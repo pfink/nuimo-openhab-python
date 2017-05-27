@@ -1,5 +1,6 @@
-openhab_api_url: "http://192.168.0.31:8080/rest"
-nuimo_mac_address: "E3:CF:57:6A:78:3E"
+openhab_api_url: "http://192.168.0.2:8080/rest"
+nuimo_mac_address: "96:EC:C6:4D:05:BA"
+bluetooth_adapter: hci0
 default_gesture_command_mapping:
     TOUCH_BOTTOM: "OFF"
     #BUTTON_PRESS: "ON"     # Normally, you want to map either BUTTON_PRESS or BUTTON_RELEASE, but not both. Otherwise, 2 commands would be send (first one after pressing, second after releasing the button).
