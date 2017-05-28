@@ -60,11 +60,11 @@ docker start nuimo-openhab
 
 ## Usage
 
-Swipe up and down to navigate between the items.  Using the "turning knob" will always send Dimmer commands (from 0 to 100) - this can only work, if the item you bound holds a dimmer state (Number from 0 to 100). Other gestures will trigger OpenHab commands as configured within the *config.yml*.
+Swipe up and down to navigate between the items. Using the "turning knob" will always send Dimmer commands (from 0 to 100) - this can only work, if the item you bound holds a dimmer state (Number from 0 to 100). Other gestures will trigger OpenHab commands as configured within the *config.yml*.
 
 ## Roadmap
 
-* Support icon sets
-* Nuimo should be bound on a sitemap instead to the *Nuimo* group item. This will make the configuration more flexible and robust.
-* It should be possible to "jump into" a group so that you can navigate with the Nuimo similar to other UIs
-* Improve stability & robustness
+- [ ] Support icon sets
+- [ ] Nuimo should be bound on a sitemap instead to the *Nuimo* group item. This will make the configuration more flexible and robust.
+- [ ] It should be possible to "jump into" a group so that you can navigate with the Nuimo similar to other UIs
+- [ ] Improve stability & robustness
