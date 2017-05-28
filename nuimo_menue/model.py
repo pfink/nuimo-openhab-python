@@ -148,7 +148,7 @@ class NuimoMenue:
             if(parent.getParent() is None):
                 self.apps = self.rootApps
             else:
-                self.apps = self.parent.parent.children
+                self.apps = parent.parent.children
 
             self.currentAppIndex = self.apps.index(parent)
             self.showIcon()
