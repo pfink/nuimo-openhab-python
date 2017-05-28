@@ -1,6 +1,6 @@
 # nuimo-openhab-python (Pre-Alpha)
 
-An application based on [getsenic/nuimo-linux-python](/getsenic/nuimo-linux-python) to use your Nuimo as a UI for OpenHab! This project is in a very early state of development - so please be prepared that the configuration capabilities are quite limited at the moment and that there will be bugs and unexpected behaviour.
+An application based on [getsenic/nuimo-linux-python](https://github.com/getsenic/nuimo-linux-python) to use your Nuimo as a UI for OpenHab! This project is in a very early state of development - so please be prepared that the configuration capabilities are quite limited at the moment and that there will be bugs and unexpected behaviour.
 
 ## Installation
 
@@ -17,7 +17,7 @@ An application based on [getsenic/nuimo-linux-python](/getsenic/nuimo-linux-pyth
 
 ### Method 2: Docker container for the Raspberry Pi (recommended)
 
-If you want to install this app on Raspberry Pi, I would recommend to use the following docker image to get started instead of the instruction above as it saves you the work to build a recent bluez version on your own: [pfink/nuimo-raspbian-docker](/pfink/nuimo-raspbian-docker)
+If you want to install this app on Raspberry Pi, I would recommend to use the following docker image to get started instead of the instruction above as it saves you the work to build a recent bluez version on your own: [pfink/nuimo-raspbian-docker](https://github.com/pfink/nuimo-raspbian-docker)
 
 1. Install docker: `curl -sSL https://get.docker.com | sh`
 1. Download & create container:`docker create --privileged --net=host --name=nuimo-openhab -v /etc/nuimo-openhab:/etc/nuimo-openhab pfink2/rpi-nuimo-openhab`
