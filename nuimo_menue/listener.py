@@ -15,9 +15,59 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             self.nuimoMenue.navigateToNextApp()
         elif event.gesture == nuimo.Gesture.SWIPE_DOWN:
             self.nuimoMenue.navigateToPreviousApp()
+        elif event.gesture == nuimo.Gesture.SWIPE_RIGHT:
+            self.nuimoMenue.navigateToSubMenue()
+        elif event.gesture == nuimo.Gesture.SWIPE_LEFT:
+            self.nuimoMenue.navigateToParentMenue()
         else:
             if event.gesture == nuimo.Gesture.BUTTON_PRESS:
-                self.nuimoMenue.showIcon()
+                self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(
+                    "         "
+                    "   .     "
+                    "   ..    "
+                    "   ...   "
+                    "   ....  "
+                    "   ...   "
+                    "   ..    "
+                    "   .     "
+                    "         "
+                ))
+            if event.gesture == nuimo.Gesture.TOUCH_BOTTOM:
+                self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(
+                    "         "
+                    "  .. ..  "
+                    "  .. ..  "
+                    "  .. ..  "
+                    "  .. ..  "
+                    "  .. ..  "
+                    "  .. ..  "
+                    "  .. ..  "
+                    "         "
+                ))
+            if event.gesture == nuimo.Gesture.TOUCH_LEFT:
+                self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(
+                    "         "
+                    "         "
+                    "  .  .   "
+                    "  . ..   "
+                    "  ....   "
+                    "  . ..   "
+                    "  .  .   "
+                    "         "
+                    "         "
+                ))
+            if event.gesture == nuimo.Gesture.TOUCH_RIGHT:
+                self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(
+                    "         " +
+                    "         " +
+                    "   .  .  " +
+                    "   .. .  " +
+                    "   ....  " +
+                    "   .. .  " +
+                    "   .  .  " +
+                    "         " +
+                    "         "
+                ))
             self.nuimoMenue.getCurrentApp().getListener().received_gesture_event(event)
 
     def started_connecting(self):

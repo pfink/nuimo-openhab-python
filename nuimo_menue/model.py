@@ -9,12 +9,16 @@ class AppListener(nuimo.ControllerListener):
 pass
 
 class App:
-    def __init__(self, name, icon: nuimo.LedMatrix, appListener: AppListener):
+    def __init__(self, name, icon: nuimo.LedMatrix, appListener: AppListener, parent = None):
         self.appListener = appListener
         self.icon = icon
         self.name = name
         self.appListener.app = self
         self.lastLedsToShow = 0
+        self.children = []
+        self.parent = parent
+        if self.parent is not None:
+            self.parent.children.append(self)
 
     def getListener(self) -> AppListener:
         return self.appListener
@@ -24,6 +28,12 @@ class App:
 
     def getName(self):
         return self.name
+
+    def getParent(self):
+        return self.parent
+
+    def getChildren(self):
+        return self.children
 
     def showRotationState(self, percent):
         fullRotationString = str(
@@ -109,6 +119,7 @@ class NuimoMenue:
 
     def __init__(self, controller: nuimo.Controller, apps):
         self.apps = apps
+        self.rootApps = apps
         self.currentAppIndex = 0
         self.controller = controller
         for a in apps:
@@ -122,6 +133,25 @@ class NuimoMenue:
     def navigateToPreviousApp(self):
         self.currentAppIndex = (self.currentAppIndex-1) % len(self.apps)
         self.showIcon()
+
+    def navigateToSubMenue(self):
+        children = self.getCurrentApp().getChildren()
+
+        if(children is not None):
+            self.currentAppIndex = 0
+            self.apps = children
+            self.showIcon()
+
+    def navigateToParentMenue(self):
+        parent = self.getCurrentApp().getParent()
+        if(parent is not None):
+            if(parent.getParent() is None):
+                self.apps = self.rootApps
+            else:
+                self.apps = self.parent.parent.children
+
+            self.currentAppIndex = self.apps.index(parent)
+            self.showIcon()
 
     def getCurrentApp(self) -> App:
         return self.apps[self.currentAppIndex]
