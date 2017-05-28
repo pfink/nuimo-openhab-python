@@ -1,4 +1,5 @@
 import sys
+import time
 
 import nuimo
 import requests
@@ -11,9 +12,14 @@ from nuimo_openhab.util import config
 class OpenHabItemListener(nuimo_menue.model.AppListener):
 
     def __init__(self, openhab: openHAB):
-        # Reminds changes that are too small to directly expose them
-        self.reminder = 0.0
         self.openhab = openhab
+
+        # Reminds changes that are too little to directly expose them to OpenHab (if the wheel is turned very slow)
+        self.reminder = 0.0
+
+        # Caches the last dimmer item state, because the OpenHab REST API is too sluggish when the wheel is turned fast
+        self.lastDimmerItemState = 0
+        self.lastDimmerItemTimestamp = 0
 
     def received_gesture_event(self, event):
         print(event.gesture)
@@ -35,23 +41,35 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
         if (abs(self.reminder) >= 1):
             self.openhab.req_post("/items/" + self.app.getName(), "REFRESH")
             print("http://192.168.0.31:8080/rest/items/" + self.app.getName() + "/state")
-            itemStateRaw = requests.get(self.openhab.base_url + "/items/" + self.app.getName() + "/state").text
             try:
-                print(itemStateRaw)
-                state = float(itemStateRaw)
-                if (state < 0):
-                    state = 0
-                if (state < 1):
-                    state *= 100
-                state = int(state)
-                print("Old state: " + str(state))
-                state += round(self.reminder)
-                if (state > 100):
-                    state = 100
-                self.reminder = 0
-                print("New state: " + str(state))
+                currentTimestamp = int(round(time.time() * 1000))
+                if (self.lastDimmerItemTimestamp < currentTimestamp-3000):
+                    itemStateRaw = requests.get(self.openhab.base_url + "/items/" + self.app.getName() + "/state").text
+                    currentState = float(itemStateRaw)
+                    if (currentState < 0):
+                        currentState = 0
+                    if (currentState < 1):
+                        currentState *= 100
+                    currentState = int(currentState)
+                    print("Raw item state: "+itemStateRaw)
+                else:
+                    currentState = self.lastDimmerItemState
+                print("Old state: " + str(currentState))
+                newState = currentState+round(self.reminder)
+                if (newState < 0):
+                    newState = 0
+                if (newState > 100):
+                    newState = 100
+
+                print("New state: " + str(newState))
+
+                self.lastDimmerItemState = newState
+                self.lastDimmerItemTimestamp = currentTimestamp
+
+                self.openhab.req_post("/items/" + self.app.getName(), str(newState))
+                self.app.showRotationState(newState)
             except Exception:
-                print(sys.exc_info()[0])
-                state = 0
-            self.openhab.req_post("/items/" + self.app.getName(), str(state))
-            self.app.showRotationState(state)
+                newState = 0
+                print(sys.exc_info())
+            finally:
+                self.reminder = 0
