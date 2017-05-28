@@ -137,7 +137,7 @@ class NuimoMenue:
     def navigateToSubMenue(self):
         children = self.getCurrentApp().getChildren()
 
-        if(children is not None):
+        if(children):
             self.currentAppIndex = 0
             self.apps = children
             self.showIcon()
