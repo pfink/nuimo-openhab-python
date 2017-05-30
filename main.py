@@ -6,6 +6,7 @@ openhab = openHAB(config["openhab_api_url"])
 apps = OpenHabAppBuilder().buildApps(openhab)
 
 manager = nuimo.ControllerManager(adapter_name=config["bluetooth_adapter"])
+manager.is_adapter_powered = True
 
 class ControllerManagerDiscoveryListener(nuimo.ControllerManagerListener):
     def controller_discovered(self, controller):
