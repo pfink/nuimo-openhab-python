@@ -6,7 +6,7 @@ An application based on [getsenic/nuimo-linux-python](https://github.com/getseni
 
 ### Method 1: Install from source
 
-1. Make sure version 5.44 of bluez is installed. Normally, you can check your bluez version by executing this command: `bluetoothd --version`
+1. Make sure bluez version 5.44 or higher  is installed. Normally, you can check your bluez version by executing this command: `bluetoothd --version`. On [getsenic/nuimo-linux-python](https://github.com/getsenic/nuimo-linux-python), you can find instructions how to install bluez from source on a Debian system (as bluez is currently only available at older versions on most Linux distributions).
 1. `git clone https://github.com/pfink/nuimo-openhab-python`
 1. Adjust *config.example.yml* to your needs and rename it to *config.yml*
 1. Optionally, you can move config.yml to another location (e.g. */etc/nuimo-openhab/config.yml*). If you do so, you have to specify that path via the environment variable `NUIMO_OPENHAB_CONFIG_PATH`.
