@@ -19,6 +19,8 @@ An application based on [getsenic/nuimo-linux-python](https://github.com/getseni
 
 If you want to install this app on Raspberry Pi, I would recommend to use the following docker image to get started instead of the instruction above as it saves you the work to build a recent bluez version on your own: [pfink/nuimo-raspbian-docker](https://github.com/pfink/nuimo-raspbian-docker)
 
+Please be aware that despite this installation method is easier and less error-prone than Method 1, it will have the consequence that you can't use the same bluetooth adapter that you use for nuimo integration on the host system anymore. So you have to disable the adapter that you want to use for nuimo integration on the host system first, or alternatively, stop the bluetooth service on the host system (`service bluetooth stop`).
+
 1. Install docker: `curl -sSL https://get.docker.com | sh`
 1. Download & create container:`docker create --privileged --net=host --name=nuimo-openhab -v /etc/nuimo-openhab:/etc/nuimo-openhab pfink2/rpi-nuimo-openhab`
 1. Copy *config.yml* template to host (can be done either manually or shorthand by the following command): `mkdir -p /etc/nuimo-openhab && docker cp nuimo-openhab:/opt/nuimo-openhab-python/config.example.yml /etc/nuimo-openhab/config.yml`
