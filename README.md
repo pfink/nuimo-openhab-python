@@ -1,5 +1,7 @@
 # nuimo-openhab-python (Pre-Alpha)
 
+[![Join the chat at https://gitter.im/nuimo-openhab-python/Lobby](https://badges.gitter.im/nuimo-openhab-python/Lobby.svg)](https://gitter.im/nuimo-openhab-python/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 An application based on [getsenic/nuimo-linux-python](https://github.com/getsenic/nuimo-linux-python) to use your Nuimo as a UI for OpenHab! This project is in a very early state of development - so please be prepared that the configuration capabilities are quite limited at the moment and that there will be bugs and unexpected behaviour.
 
 ## Installation
