@@ -71,4 +71,4 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                 print(sys.exc_info())
             finally:
                 self.reminder = 0
-                return newState
+        return self.lastDimmerItemState
