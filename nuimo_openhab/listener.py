@@ -24,9 +24,9 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
     def received_gesture_event(self, event):
         print(event.gesture)
         if event.gesture == nuimo.Gesture.ROTATION:
-            self.handleRotation(event)
+            return self.handleRotation(event)
         else:
-            self.handleCommonGesture(event)
+            return self.handleCommonGesture(event)
 
     def handleCommonGesture(self, event):
         gestureCommandMapping = config["default_gesture_command_mapping"]
@@ -67,9 +67,9 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                 self.lastDimmerItemTimestamp = currentTimestamp
 
                 self.openhab.req_post("/items/" + self.app.getName(), str(newState))
-                self.app.showRotationState(newState)
             except Exception:
                 newState = 0
                 print(sys.exc_info())
             finally:
                 self.reminder = 0
+                return newState
