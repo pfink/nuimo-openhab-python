@@ -22,7 +22,6 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
         self.lastDimmerItemTimestamp = 0
 
     def received_gesture_event(self, event):
-        print(event.gesture)
         if event.gesture == nuimo.Gesture.ROTATION:
             return self.handleRotation(event)
         else:

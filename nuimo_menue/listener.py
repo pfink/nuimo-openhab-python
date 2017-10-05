@@ -12,6 +12,8 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
         self.connected = True
 
     def received_gesture_event(self, event):
+        print(event.gesture)
+
         if event.gesture == nuimo.Gesture.SWIPE_UP:
             self.nuimoMenue.navigateToNextApp()
         elif event.gesture == nuimo.Gesture.SWIPE_DOWN:
