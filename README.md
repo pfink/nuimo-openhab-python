@@ -14,11 +14,11 @@ An application based on [getsenic/nuimo-linux-python](https://github.com/getseni
     1. `apt-get install python3-pip python3-dbus python3-gi python3-yaml`
     1. `pip3 install -r nuimo-openhab-python/requirements.txt`
 
-## OpenHab Configuration
+## openHAB Configuration
 
-Before you start the App, you should configure the OpenHab-side to define which items you want to control with your Nuimo.
+Before you start the App, you should configure the openHAB-side to define which items you want to control with your Nuimo.
 
-1. Create a group item with the name *Nuimo* on your OpenHab and add items you want to control with the Nuimo to that Group.
+1. Create a group item with the name *Nuimo* on your openHAB and add items you want to control with the Nuimo to that Group.
 1. Icons are not supported yet. As a "dirty workaround", you have to use labels for your items to define the icons showed on the 9x9 Nuimo LED matrix. The label have to be a string of the length of 81 chars (9x9) and consist of asterisks(`*`) for led=on and spaces (` `) for led=off.
 
 Please find an example configuration below:
@@ -50,7 +50,7 @@ docker start nuimo-openhab
 
 ## Usage
 
-Swipe up and down to navigate between the items. Swipe left and right to switch in our out of a group. Using the "turning knob" will always send Dimmer commands (from 0 to 100) - this can only work, if the item you bound holds a dimmer state (Number from 0 to 100). Other gestures will trigger OpenHab commands as configured within the *config.yml*.
+Swipe up and down to navigate between the items. Swipe left and right to switch in our out of a group. Using the "turning knob" will always send Dimmer commands (from 0 to 100) - this can only work, if the item you bound holds a dimmer state (Number from 0 to 100). Other gestures will trigger openHAB commands as configured within the *config.yml*.
 
 ## Roadmap
 
