@@ -39,7 +39,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
         self.reminder += valueChange
         if (abs(self.reminder) >= 1):
             self.openhab.req_post("/items/" + self.app.getName(), "REFRESH")
-            print("http://192.168.0.31:8080/rest/items/" + self.app.getName() + "/state")
+            print(self.openhab.base_url + self.app.getName() + "/state")
             try:
                 currentTimestamp = int(round(time.time() * 1000))
                 if (self.lastDimmerItemTimestamp < currentTimestamp-3000):
