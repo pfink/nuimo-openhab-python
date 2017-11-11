@@ -4,29 +4,15 @@
 
 An application based on [getsenic/nuimo-linux-python](https://github.com/getsenic/nuimo-linux-python) to use your Nuimo as a UI for OpenHab! This project is in a very early state of development - so please be prepared that the configuration capabilities are quite limited at the moment and that there will be bugs and unexpected behaviour.
 
-## Installation
+## Installation (Linux only)
 
-### Method 1: Install from source
-
-1. Make sure bluez version 5.44 or higher  is installed. Normally, you can check your bluez version by executing this command: `bluetoothd --version`. On [getsenic/nuimo-linux-python](https://github.com/getsenic/nuimo-linux-python), you can find instructions how to install bluez from source on a Debian system (as bluez is currently only available at older versions on most Linux distributions).
+1. Make sure bluez version 5.43 or higher  is installed. Normally, you can check your bluez version by executing this command: `bluetoothd --version`.
 1. `git clone https://github.com/pfink/nuimo-openhab-python`
 1. Adjust *config.example.yml* to your needs and rename it to *config.yml*
 1. Optionally, you can move config.yml to another location (e.g. */etc/nuimo-openhab/config.yml*). If you do so, you have to specify that path via the environment variable `NUIMO_OPENHAB_CONFIG_PATH`.
 1. Install dependencies (the following commands are examples for a Debian-based system):
     1. `apt-get install python3-pip python3-dbus python3-gi python3-yaml`
     1. `pip3 install -r nuimo-openhab-python/requirements.txt`
-
-
-### Method 2: Docker container for the Raspberry Pi (recommended)
-
-If you want to install this app on Raspberry Pi, I would recommend to use the following docker image to get started instead of the instruction above as it saves you the work to build a recent bluez version on your own: [pfink/nuimo-raspbian-docker](https://github.com/pfink/nuimo-raspbian-docker)
-
-Please be aware that despite this installation method is easier and less error-prone than Method 1, it will have the consequence that you can't use the same bluetooth adapter that you use for nuimo integration on the host system anymore. So you have to disable the adapter that you want to use for nuimo integration on the host system first, or alternatively, stop the bluetooth service on the host system (`service bluetooth stop`).
-
-1. Install docker: `curl -sSL https://get.docker.com | sh`
-1. Download & create container:`docker create --privileged --net=host --name=nuimo-openhab -v /etc/nuimo-openhab:/etc/nuimo-openhab pfink2/rpi-nuimo-openhab`
-1. Copy *config.yml* template to host (can be done either manually or shorthand by the following command): `mkdir -p /etc/nuimo-openhab && docker cp nuimo-openhab:/opt/nuimo-openhab-python/config.example.yml /etc/nuimo-openhab/config.yml`
-1. Adjust configuration file under */etc/nuimo-openhab/config.yml* to your needs.
 
 ## OpenHab Configuration
 
