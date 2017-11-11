@@ -100,8 +100,9 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             self.nuimoMenue.reconnect()
 
     def showRotationState(self, percent):
+
         fullRotationString = str(
-            "    *    "
+            "   ***   "
             "  *   *  "
             " *     * "
             "*       *"
@@ -109,7 +110,7 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             "*       *"
             " *     * "
             "  *   *  "
-            "    *   "
+            "   ***   "
         )
         fullRotationIsCircular = True
         '''
@@ -148,30 +149,27 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
 
         if(percent != 0):
             ledsToShow = math.ceil(percent*ledCnt/100)
-            print("leds:"+str(ledsToShow))
             currentRotationString = list()
             itCnt = 0
-
             for c in fullRotationString:
+                column = itCnt%9
+                row = itCnt // 9
                 itCnt += 1
-                if c == "*" and ledsToShow != 0 and (itCnt%9 > 4 or itCnt%9 ==0 or not fullRotationIsCircular):
+                if c == "*" and ledsToShow != 0 and (not fullRotationIsCircular or column > 4 or row == 0 and column == 4):
                     ledsToShow -= 1
                     currentRotationString.append("*")
                 else:
                     currentRotationString.append(" ")
 
-            itCnt = 0
             if fullRotationIsCircular:
-                first = True
-                for c in fullRotationString[::-1]:
-                    itCnt += 1
-                    if c == "*" and ledsToShow != 0 and (itCnt%9 > 4 or itCnt%9 ==0):
-                        if(not first):
-                            ledsToShow -= 1
-                        index = int(abs(itCnt-81))
-                        print("print Led:" + str(index))
-                        currentRotationString[index] = "*"
-                        first = False
+                itCnt = 80
+                while(itCnt >= 0):
+                    column = itCnt % 9
+                    row = itCnt // 9
+                    if fullRotationString[itCnt] == "*" and ledsToShow != 0 and column <= 4 and not (row == 0 and column == 4):
+                        ledsToShow -= 1
+                        currentRotationString[itCnt] = "*"
+                    itCnt -= 1
 
             matrix = nuimo.LedMatrix("".join(currentRotationString))
             self.nuimoMenue.controller.display_matrix(matrix=matrix,fading=True, ignore_duplicates=True)
