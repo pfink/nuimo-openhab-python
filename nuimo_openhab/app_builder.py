@@ -8,11 +8,12 @@ class OpenHabAppBuilder:
         nuimoGroupItem = openhab.req_get("/items/"+rootItemName)
         for nuimoItem in nuimoGroupItem["members"]:
             if("label" in nuimoItem):
-                icon = nuimo.LedMatrix(
-                    nuimoItem["label"]
-                )
-            app = App(name=nuimoItem["name"], appListener=OpenHabItemListener(openhab), icon=icon, parent=parent)
-            if(nuimoItem["type"] == "Group"):
-                self.buildApps(openhab, nuimoItem["name"], app)
-            apps.append(app)
+                if("*" in nuimoItem["label"] or "." in nuimoItem["label"]):
+                    icon = nuimo.LedMatrix(
+                        nuimoItem["label"]
+                    )
+                    app = App(name=nuimoItem["name"], appListener=OpenHabItemListener(openhab), icon=icon, parent=parent)
+                    if(nuimoItem["type"] == "Group"):
+                        self.buildApps(openhab, nuimoItem["name"], app)
+                    apps.append(app)
         return apps
