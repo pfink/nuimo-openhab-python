@@ -10,22 +10,39 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
     def __init__(self, nuimoMenue: NuimoMenue):
         self.nuimoMenue = nuimoMenue
         self.connected = True
+        self.isButtonHold = False
+        self.menueWheelTurnWhileHold = False
+        self.reminder = 0
 
     def received_gesture_event(self, event):
         print(event.gesture)
 
+        #mappedCommand = config.getCommand
+
+        if event.gesture == nuimo.Gesture.BUTTON_PRESS:
+            self.isButtonHold = True
+        elif event.gesture == nuimo.Gesture.BUTTON_RELEASE:
+            self.isButtonHold = False
+        elif event.gesture == nuimo.Gesture.ROTATION and self.isButtonHold:
+            self.menueWheelTurnWhileHold = True
+
+
         if event.gesture == nuimo.Gesture.SWIPE_UP:
-            self.nuimoMenue.navigateToNextApp()
-        elif event.gesture == nuimo.Gesture.SWIPE_DOWN:
-            self.nuimoMenue.navigateToPreviousApp()
-        elif event.gesture == nuimo.Gesture.SWIPE_RIGHT:
-            self.nuimoMenue.navigateToSubMenue()
-        elif event.gesture == nuimo.Gesture.SWIPE_LEFT:
+        #    self.nuimoMenue.navigateToNextApp()
             self.nuimoMenue.navigateToParentMenue()
-        else:
+        elif event.gesture == nuimo.Gesture.SWIPE_DOWN:
+        #    self.nuimoMenue.navigateToPreviousApp()
+        #elif event.gesture == nuimo.Gesture.SWIPE_RIGHT:
+            self.nuimoMenue.navigateToSubMenue()
+        #elif event.gesture == nuimo.Gesture.SWIPE_LEFT:
+        #    self.nuimoMenue.navigateToParentMenue()
+        elif event.gesture == nuimo.Gesture.ROTATION and self.isButtonHold:
+            self.nuimoMenue.showIcon()
+            self.wheelNavigation(event)
+        elif not(self.isButtonHold or event.gesture == nuimo.Gesture.BUTTON_RELEASE and self.menueWheelTurnWhileHold):
             gestureResult = self.nuimoMenue.getCurrentApp().getListener().received_gesture_event(event)
 
-            if event.gesture == nuimo.Gesture.BUTTON_PRESS:
+            if event.gesture == nuimo.Gesture.BUTTON_RELEASE:
                 self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(
                     "         "
                     "   .     "
@@ -76,6 +93,9 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             if event.gesture == nuimo.Gesture.ROTATION:
                 self.showRotationState(percent=gestureResult)
 
+        if event.gesture == nuimo.Gesture.BUTTON_RELEASE:
+            self.menueWheelTurnWhileHold = False
+
     def started_connecting(self):
         print("Connecting...")
 
@@ -98,6 +118,17 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
         while (not self.connected):
             time.sleep(5)
             self.nuimoMenue.reconnect()
+
+
+    def wheelNavigation(self, event):
+        valueChange = event.value / 30
+        self.reminder += valueChange
+        if (abs(self.reminder) >= 10):
+            if(self.reminder < 0):
+                self.nuimoMenue.navigateToPreviousApp()
+            else:
+                self.nuimoMenue.navigateToNextApp()
+            self.reminder = 0
 
     def showRotationState(self, percent):
 
