@@ -49,6 +49,8 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
                 self.nuimoMenue.navigateToNextApp()
             elif mappedCommand == "PREVIOUS":
                 self.nuimoMenue.navigateToPreviousApp()
+            elif mappedCommand == "SHOWAPP":
+                self.nuimoMenue.showIcon()
             #elif event.gesture == nuimo.Gesture.SWIPE_LEFT:
             #    self.nuimoMenue.navigateToParentMenue()
             elif mappedCommand == "WHEELNAVIGATION":
