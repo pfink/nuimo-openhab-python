@@ -7,7 +7,7 @@ An application based on [getsenic/nuimo-linux-python](https://github.com/getseni
 ## Installation (Linux only)
 
 1. Make sure bluez version 5.43 or higher  is installed. Normally, you can check your bluez version by executing this command: `bluetoothd --version`.
-1. `git clone https://github.com/pfink/nuimo-openhab-python`
+1. `git clone --recursive https://github.com/pfink/nuimo-openhab-python`
 1. Adjust *config.example.yml* to your needs and rename it to *config.yml*
 1. Optionally, you can move config.yml to another location (e.g. */etc/nuimo-openhab/config.yml*). If you do so, you have to specify that path via the environment variable `NUIMO_OPENHAB_CONFIG_PATH`.
 1. Install dependencies (the following commands are examples for a Debian-based system):
