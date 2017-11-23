@@ -3,7 +3,10 @@ import time
 
 import nuimo
 
+from nuimo_menue import icons
 from nuimo_menue.model import NuimoMenue
+from nuimo_openhab.util import config
+from util.button import *
 
 
 class NuimoMenueControllerListener(nuimo.ControllerListener):
@@ -13,88 +16,65 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
         self.isButtonHold = False
         self.menueWheelTurnWhileHold = False
         self.reminder = 0
+        self.rawEventHandler = ButtonRawEventHandler()
 
     def received_gesture_event(self, event):
-        print(event.gesture)
+        self.handle_gesture_event(event)
+        self.handle_extra_events(event)
 
-        #mappedCommand = config.getCommand
+    def handle_extra_events(self, event):
+        extra_event = self.rawEventHandler.get_highlevel_event(event.gesture)
+        if(extra_event is not None):
+            event = type('test', (object,), {})()
+            event.gesture = extra_event
+            self.handle_gesture_event(event)
 
-        if event.gesture == nuimo.Gesture.BUTTON_PRESS:
-            self.isButtonHold = True
-        elif event.gesture == nuimo.Gesture.BUTTON_RELEASE:
-            self.isButtonHold = False
-        elif event.gesture == nuimo.Gesture.ROTATION and self.isButtonHold:
-            self.menueWheelTurnWhileHold = True
+    def handle_gesture_event(self, event):
+        mappedCommand = config.get_mapped_command(gesture=event.gesture, mode=self.nuimoMenue.currentMode, namespace="MENUE")
 
+        print("Current Mode: "+ str(self.nuimoMenue.currentMode))
+        print("Mapped Command: "+ str(mappedCommand))
 
-        if event.gesture == nuimo.Gesture.SWIPE_UP:
-        #    self.nuimoMenue.navigateToNextApp()
-            self.nuimoMenue.navigateToParentMenue()
-        elif event.gesture == nuimo.Gesture.SWIPE_DOWN:
-        #    self.nuimoMenue.navigateToPreviousApp()
-        #elif event.gesture == nuimo.Gesture.SWIPE_RIGHT:
-            self.nuimoMenue.navigateToSubMenue()
-        #elif event.gesture == nuimo.Gesture.SWIPE_LEFT:
-        #    self.nuimoMenue.navigateToParentMenue()
-        elif event.gesture == nuimo.Gesture.ROTATION and self.isButtonHold:
-            self.nuimoMenue.showIcon()
-            self.wheelNavigation(event)
-        elif not(self.isButtonHold or event.gesture == nuimo.Gesture.BUTTON_RELEASE and self.menueWheelTurnWhileHold):
+        if mappedCommand is not None:
+            if "CHANGEMODE" in mappedCommand:
+                self.nuimoMenue.currentMode = mappedCommand.split("=")[1]
+            #elif mappedCommand == "WHEELNAVIGATION":
+            #    self.menueWheelTurnWhileHold = True
+
+            elif mappedCommand == "PARENT":
+                self.nuimoMenue.navigateToParentMenue()
+            elif mappedCommand == "CHILD":
+                self.nuimoMenue.navigateToSubMenue()
+            elif mappedCommand == "NEXT":
+                self.nuimoMenue.navigateToNextApp()
+            elif mappedCommand == "PREVIOUS":
+                self.nuimoMenue.navigateToPreviousApp()
+            #elif event.gesture == nuimo.Gesture.SWIPE_LEFT:
+            #    self.nuimoMenue.navigateToParentMenue()
+            elif mappedCommand == "WHEELNAVIGATION":
+                self.nuimoMenue.showIcon()
+                self.wheelNavigation(event)
+        else:
             gestureResult = self.nuimoMenue.getCurrentApp().getListener().received_gesture_event(event)
-
-            if event.gesture == nuimo.Gesture.BUTTON_RELEASE:
-                self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(
-                    "         "
-                    "   .     "
-                    "   ..    "
-                    "   ...   "
-                    "   ....  "
-                    "   ...   "
-                    "   ..    "
-                    "   .     "
-                    "         "
-                ))
-            if event.gesture == nuimo.Gesture.TOUCH_BOTTOM:
-                self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(
-                    "         "
-                    "  .. ..  "
-                    "  .. ..  "
-                    "  .. ..  "
-                    "  .. ..  "
-                    "  .. ..  "
-                    "  .. ..  "
-                    "  .. ..  "
-                    "         "
-                ))
-            if event.gesture == nuimo.Gesture.TOUCH_LEFT:
-                self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(
-                    "         "
-                    "         "
-                    "  .  .   "
-                    "  . ..   "
-                    "  ....   "
-                    "  . ..   "
-                    "  .  .   "
-                    "         "
-                    "         "
-                ))
-            if event.gesture == nuimo.Gesture.TOUCH_RIGHT:
-                self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(
-                    "         " +
-                    "         " +
-                    "   .  .  " +
-                    "   .. .  " +
-                    "   ....  " +
-                    "   .. .  " +
-                    "   .  .  " +
-                    "         " +
-                    "         "
-                ))
             if event.gesture == nuimo.Gesture.ROTATION:
                 self.showRotationState(percent=gestureResult)
+            else:
+                self.show_command_icon(event)
 
-        if event.gesture == nuimo.Gesture.BUTTON_RELEASE:
-            self.menueWheelTurnWhileHold = False
+
+        #if event.gesture == nuimo.Gesture.BUTTON_RELEASE:
+        #    self.menueWheelTurnWhileHold = False
+
+    def show_command_icon(self, event):
+        if event.gesture == ButtonEvents.BUTTON_CLICK:
+            self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["play"]))
+        if event.gesture == nuimo.Gesture.TOUCH_BOTTOM:
+            self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["pause"]))
+        if event.gesture == nuimo.Gesture.SWIPE_LEFT:
+            self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["previous"]))
+        if event.gesture == nuimo.Gesture.SWIPE_RIGHT:
+            self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["next"]))
+
 
     def started_connecting(self):
         print("Connecting...")
@@ -132,46 +112,8 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
 
     def showRotationState(self, percent):
 
-        fullRotationString = str(
-            "   ***   "
-            "  *   *  "
-            " *     * "
-            "*       *"
-            "*       *"
-            "*       *"
-            " *     * "
-            "  *   *  "
-            "   ***   "
-        )
+        fullRotationString = icons[config.rotation_icon]
         fullRotationIsCircular = True
-        '''
-        fullRotationString = str(
-            "*********"
-            "*       *"
-            "*       *"
-            "*       *"
-            "*       *"
-            "*       *"
-            "*       *"
-            "*       *"
-            "*********"
-        )
-        fullRotationIsCircular = True
-        '''
-        '''
-        fullRotationString = str(
-            "*********"
-            "*********"
-            "*********"
-            "*********"
-            "*********"
-            "*********"
-            "*********"
-            "*********"
-            "*********"
-        )
-        fullRotationIsCircular = False
-        '''
 
         ledCnt = int()
         for c in fullRotationString:

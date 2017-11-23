@@ -28,11 +28,10 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
             return self.handleCommonGesture(event)
 
     def handleCommonGesture(self, event):
-        gestureCommandMapping = config["default_gesture_command_mapping"]
-        currentGestureName = nuimo.Gesture(event.gesture).name
-
-        if(currentGestureName in gestureCommandMapping):
-            self.openhab.req_post("/items/" + self.app.getName(), gestureCommandMapping[currentGestureName])
+        mappedCommand = config.get_mapped_command(gesture=event.gesture, namespace="OPENHAB")
+        print("Mapped command openHAB: "+ str(mappedCommand))
+        if(mappedCommand is not None):
+            self.openhab.req_post("/items/" + self.app.getName(), mappedCommand)
 
     def handleRotation(self, event):
         valueChange = event.value / 30

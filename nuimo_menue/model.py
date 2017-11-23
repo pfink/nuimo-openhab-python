@@ -42,6 +42,7 @@ class NuimoMenue:
         self.rootApps = apps
         self.currentAppIndex = 0
         self.controller = controller
+        self.currentMode = "default"
 
     def navigateToNextApp(self):
         self.currentAppIndex = (self.currentAppIndex+1) % len(self.apps)
@@ -53,11 +54,10 @@ class NuimoMenue:
 
     def navigateToSubMenue(self):
         children = self.getCurrentApp().getChildren()
-
         if(children):
             self.currentAppIndex = 0
             self.apps = children
-            self.showIcon()
+        self.showIcon()
 
     def navigateToParentMenue(self):
         parent = self.getCurrentApp().getParent()
