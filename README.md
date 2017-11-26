@@ -46,12 +46,6 @@ cd nuimo-openhab-python
 python3 main.py
 ```
 
-### Docker container
-
-```
-docker start nuimo-openhab
-```
-
 ## Usage
 
 Swipe up and down to navigate between the items. Swipe left and right to switch in our out of a group. Using the "turning knob" will always send Dimmer commands (from 0 to 100) - this can only work, if the item you bound holds a dimmer state (Number from 0 to 100). Other gestures will trigger openHAB commands as configured within the *config.yml*.
