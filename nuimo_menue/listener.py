@@ -15,7 +15,7 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
         self.connected = True
         self.isButtonHold = False
         self.menueWheelTurnWhileHold = False
-        self.reminder = 0
+        self.wheelReminder = 0
         self.rawEventHandler = ButtonRawEventHandler()
 
     def received_gesture_event(self, event):
@@ -38,9 +38,6 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
         if mappedCommand is not None:
             if "CHANGEMODE" in mappedCommand:
                 self.nuimoMenue.currentMode = mappedCommand.split("=")[1]
-            #elif mappedCommand == "WHEELNAVIGATION":
-            #    self.menueWheelTurnWhileHold = True
-
             elif mappedCommand == "PARENT":
                 self.nuimoMenue.navigateToParentMenue()
             elif mappedCommand == "CHILD":
@@ -56,6 +53,9 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             elif mappedCommand == "WHEELNAVIGATION":
                 self.nuimoMenue.showIcon()
                 self.wheelNavigation(event)
+
+            if mappedCommand != "WHEELNAVIGATION":
+                self.wheelReminder = 0
         else:
             gestureResult = self.nuimoMenue.getCurrentApp().getListener().received_gesture_event(event)
             if event.gesture == nuimo.Gesture.ROTATION:
@@ -104,13 +104,13 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
 
     def wheelNavigation(self, event):
         valueChange = event.value / 30
-        self.reminder += valueChange
-        if (abs(self.reminder) >= 10):
-            if(self.reminder < 0):
+        self.wheelReminder += valueChange
+        if (abs(self.wheelReminder) >= 10):
+            if(self.wheelReminder < 0):
                 self.nuimoMenue.navigateToPreviousApp()
             else:
                 self.nuimoMenue.navigateToNextApp()
-            self.reminder = 0
+            self.wheelReminder = 0
 
     def showRotationState(self, percent):
 
