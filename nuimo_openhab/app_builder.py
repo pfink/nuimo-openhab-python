@@ -26,9 +26,10 @@ class OpenHabAppBuilder:
         icon = self.fetchIconFromItem(nuimoItem)
         app = App(name=nuimoItem["name"], appListener=OpenHabItemListener(self.openhab), icon=icon, parent=parent)
 
-        if (nuimoItem["type"] == "Group" and "members" in nuimoItem):
+        if "members" in nuimoItem:
             for nuimoChildItem in nuimoItem["members"]:
-                self.createAppFromItem(nuimoChildItem, app)
+                if(nuimoChildItem["type"] == "Group"):
+                    self.createAppFromItem(nuimoChildItem, app)
 
         return app
 
@@ -41,7 +42,7 @@ class OpenHabAppBuilder:
             rawIcon = nuimoItem["label"]
         elif "category" in nuimoItem and nuimoItem["category"] in nuimo_menue.icons:
             rawIcon = nuimo_menue.icons[nuimoItem["category"]]
-        elif nuimoItem["type"] == "Group" and nuimoItem["name"] != self.rootItemName:
+        elif nuimoItem["name"] != self.rootItemName:
             raise RuntimeError("No icon found for openHAB item '"+ nuimoItem["name"]+"'")
 
         if(rawIcon is not None):
