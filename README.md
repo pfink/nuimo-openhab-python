@@ -1,4 +1,4 @@
-# nuimo-openhab-python (Pre-Alpha)
+# nuimo-openhab-python (Alpha)
 
 [![Join the chat at https://gitter.im/nuimo-openhab-python/Lobby](https://badges.gitter.im/nuimo-openhab-python/Lobby.svg)](https://gitter.im/nuimo-openhab-python/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -19,19 +19,23 @@ An application based on [getsenic/nuimo-linux-python](https://github.com/getseni
 Before you start the App, you should configure the openHAB-side to define which items you want to control with your Nuimo.
 
 1. Create a group item with the name *Nuimo* on your openHAB and add items you want to control with the Nuimo to that Group.
-1. Icons are not supported yet. As a "dirty workaround", you have to use labels for your items to define the icons showed on the 9x9 Nuimo LED matrix. The label have to be a string of the length of 81 chars (9x9) and consist of asterisks(`*`) for led=on and spaces (` `) for led=off.
+1. Make sure that every group member defines an icon. There are two ways of defining an icon for an item:
+    1. Put the name of a [predefined icon](https://gist.github.com/pfink/7a468eb906644dc570cc28acb7c4d2b7) into the `<icon>` tag.
+    1. Alternatively, you can put use labels to define the icons showed on the 9x9 Nuimo LED matrix. The label have to be a string of the length of 81 chars (9x9) and consist of asterisks(`*`) for led=on and spaces (` `) for led=off.
+1. You can nest groups to create menu hierarchies.
 
 Please find an example configuration below:
 
 ```
 Group Nuimo
 
-Group:String:AVG S "**********        *        *        *********        *        *        **********" (Nuimo)
-Group:String:AVG W "*       **       **       **       **   *   **  * *  ** *   * ***     ***       *" (Nuimo)
-Group:String:AVG B "******** *       **       **      * *******  *      * *       **       ********* " (Nuimo)
+Group:String:AVG MyLamp <light> (Nuimo)
+Group:String:AVG MyMusic <music> (Nuimo)
+Group:String:AVG PlayerGuestroom <letterG> (MyMusic)
+Group:String:AVG PlayerBedroomWithCustomIcon "******** *       **       **      * *******  *      * *       **       ********* " (Nuimo)
 ```
 
-This will define 3 group items (`S`, `W` and `B`) that can be controlled via Nuimo (you don't have to use group items, normal items will also work). Each "real item" you add to one of those 3 groups will receive the commands sent via the nuimo to that particular group.
+This will define 4 group items (`MyLamp` and `MyMusic` with it's childs `PlayerGuestroom` (led icon is a "G") and `PlayerBedroomWithCustomIcon` (led icon is a custom "B")) that can be controlled via Nuimo. Each "real item" you add to one of those 4 groups will receive the commands sent via the nuimo to that particular group.
 
 ## Start the application
 
@@ -53,9 +57,10 @@ docker start nuimo-openhab
 Swipe up and down to navigate between the items. Swipe left and right to switch in our out of a group. Using the "turning knob" will always send Dimmer commands (from 0 to 100) - this can only work, if the item you bound holds a dimmer state (Number from 0 to 100). Other gestures will trigger openHAB commands as configured within the *config.yml*.
 
 ## Roadmap
-- [ ] Extend configuration possibilities & usability
+- [x] Extend configuration possibilities & usability
+- [ ] Add alternative key mapping examples and introduction video for the recommended key mapping
 - [ ] Logging
-- [ ] Support icon sets
+- [x] Support icon sets
 - [ ] Nuimo should be bound on a sitemap instead to the *Nuimo* group item. This will make the configuration more flexible and robust.
 - [x] It should be possible to "jump into" a group so that you can navigate with the Nuimo similar to other UIs
 - [ ] Improve stability & robustness

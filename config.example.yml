@@ -20,7 +20,7 @@ key_mapping:
       SWIPE_LEFT: "OPENHAB.PREVIOUS"
       SWIPE_RIGHT: "OPENHAB.NEXT"
       ROTATION: "OPENHAB.WHEELDIMMER"
-    # More modes can be dynamically added
+    # More modes can be added here
     menue:
       SWIPE_UP: "MENUE.PARENT"
       SWIPE_DOWN: "MENUE.CHILD"
