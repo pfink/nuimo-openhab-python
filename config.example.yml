@@ -28,10 +28,3 @@ key_mapping:
       SWIPE_RIGHT: "MENUE.NEXT"
       BUTTON_RELEASE: "MENUE.CHANGEMODE=default"
       ROTATION: "MENUE.WHEELNAVIGATION"
-
-default_gesture_command_mapping:
-    TOUCH_BOTTOM: "OFF"
-    #BUTTON_PRESS: "ON"     # Normally, you want to map either BUTTON_PRESS or BUTTON_RELEASE, but not both. Otherwise, 2 commands would be send (first one after pressing, second after releasing the button).
-    BUTTON_RELEASE: "ON"
-    TOUCH_RIGHT: "NEXT"
-    TOUCH_LEFT: "PREVIOUS"
