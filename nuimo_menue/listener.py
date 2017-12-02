@@ -48,8 +48,6 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
                 self.nuimoMenue.navigateToPreviousApp()
             elif mappedCommand == "SHOWAPP":
                 self.nuimoMenue.showIcon()
-            #elif event.gesture == nuimo.Gesture.SWIPE_LEFT:
-            #    self.nuimoMenue.navigateToParentMenue()
             elif mappedCommand == "WHEELNAVIGATION":
                 self.nuimoMenue.showIcon()
                 self.wheelNavigation(event)
@@ -62,10 +60,6 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
                 self.showRotationState(percent=gestureResult)
             else:
                 self.show_command_icon(event)
-
-
-        #if event.gesture == nuimo.Gesture.BUTTON_RELEASE:
-        #    self.menueWheelTurnWhileHold = False
 
     def show_command_icon(self, event):
         if event.gesture == ButtonEvents.BUTTON_CLICK:
