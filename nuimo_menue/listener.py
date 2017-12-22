@@ -30,12 +30,14 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             self.handle_gesture_event(event)
 
     def handle_gesture_event(self, event):
-        mappedCommand = config.get_mapped_command(gesture=event.gesture, mode=self.nuimoMenue.currentMode, namespace="MENUE")
+        mappedCommands = config.get_mapped_commands(gesture=event.gesture, mode=self.nuimoMenue.currentMode, namespace="MENUE")
+        if mappedCommands:
+            print(str(mappedCommands))
+            mappedCommand = mappedCommands[0]
 
-        print("Current Mode: "+ str(self.nuimoMenue.currentMode))
-        print("Mapped Command: "+ str(mappedCommand))
+            print("Current Mode: " + str(self.nuimoMenue.currentMode))
+            print("Mapped Command: " + str(mappedCommand))
 
-        if mappedCommand is not None:
             if "CHANGEMODE" in mappedCommand:
                 self.nuimoMenue.currentMode = mappedCommand.split("=")[1]
             elif mappedCommand == "PARENT":
@@ -47,9 +49,9 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             elif mappedCommand == "PREVIOUS":
                 self.nuimoMenue.navigateToPreviousApp()
             elif mappedCommand == "SHOWAPP":
+                print("Name: "+self.nuimoMenue.getCurrentApp().getName())
                 self.nuimoMenue.showIcon()
             elif mappedCommand == "WHEELNAVIGATION":
-                self.nuimoMenue.showIcon()
                 self.wheelNavigation(event)
 
             if mappedCommand != "WHEELNAVIGATION":
@@ -59,17 +61,23 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             if event.gesture == nuimo.Gesture.ROTATION:
                 self.showRotationState(percent=gestureResult)
             else:
-                self.show_command_icon(event)
+                self.show_command_icon(fqCommand=gestureResult)
 
-    def show_command_icon(self, event):
-        if event.gesture == ButtonEvents.BUTTON_CLICK:
-            self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["play"]))
-        if event.gesture == nuimo.Gesture.TOUCH_BOTTOM:
-            self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["pause"]))
-        if event.gesture == nuimo.Gesture.SWIPE_LEFT:
-            self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["previous"]))
-        if event.gesture == nuimo.Gesture.SWIPE_RIGHT:
-            self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["next"]))
+    def show_command_icon(self, fqCommand: str):
+        print("Looking for "+str(fqCommand))
+        print(str(config["command_icon_mapping"]))
+        if fqCommand in config["command_icon_mapping"] and config["command_icon_mapping"][fqCommand] in icons:
+            icon = icons[config["command_icon_mapping"][fqCommand]]
+            self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icon))
+
+        #if event.gesture == ButtonEvents.BUTTON_CLICK:
+        #    "play"]))
+        #if event.gesture == nuimo.Gesture.TOUCH_BOTTOM:
+        #    self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["pause"]))
+        #if event.gesture == nuimo.Gesture.SWIPE_LEFT:
+        #    self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["previous"]))
+        #if event.gesture == nuimo.Gesture.SWIPE_RIGHT:
+        #    self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["next"]))
 
 
     def started_connecting(self):

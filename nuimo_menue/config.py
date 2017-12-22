@@ -22,12 +22,29 @@ class NuimoMenueConfiguration:
             self.rotation_icon = rotation_icon
 
 
-    def get_mapped_command(self, gesture: AdvancedGesture, mode: str = "default", namespace: str = None):
+    def get_mapped_commands(self, gesture: AdvancedGesture, mode: str = "default", namespace: str = None):
         print(gesture.name)
+        mapped_commands = []
         currentModeKeys = self.key_mapping[mode]
         if gesture.name in currentModeKeys:
-            splittedFqCommand = currentModeKeys[gesture.name].split(".")
-            givenNamespace = splittedFqCommand[0]
-            command = splittedFqCommand[1]
-            if namespace is None or namespace == givenNamespace:
-                return command
+            if isinstance(currentModeKeys[gesture.name], list):
+                for fq_command in currentModeKeys[gesture.name]:
+                    command = self.resolve_fq_command(fq_command, namespace)
+                    if(command is not None):
+                        mapped_commands.append(command)
+            else:
+                command = self.resolve_fq_command(currentModeKeys[gesture.name], namespace)
+                if (command is not None):
+                    mapped_commands.append(command)
+
+        return mapped_commands
+
+
+
+
+    def resolve_fq_command(self, fq_command: str, namespace: str = None):
+        splittedFqCommand = fq_command.split(".")
+        givenNamespace = ".".join(splittedFqCommand[:-1])
+        command = splittedFqCommand[-1]
+        if namespace is None or namespace == givenNamespace:
+            return command

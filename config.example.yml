@@ -1,4 +1,5 @@
 openhab_api_url: "http://localhost:8080/rest"
+openhab_sitemap: "nuimo"
 nuimo_mac_address: "96:EC:C6:4D:05:BA"
 bluetooth_adapter: hci0
 rotation_icon: circle
@@ -14,12 +15,16 @@ key_mapping:
       # The mode can be changed with the MENUE.CHANGEMODE=newmode command. "newmode" must be a mode that is listed in this key mapping
       BUTTON_PRESS: "MENUE.CHANGEMODE=menue"
       BUTTON_HOLD: "MENUE.SHOWAPP"
-      BUTTON_CLICK: "OPENHAB.TOGGLE"
+      BUTTON_CLICK:
+        - "OPENHAB.Switch.TOGGLE"
+        - "OPENHAB.CustomSwitch.TOGGLE"
       SWIPE_UP: "MENUE.PARENT"
       SWIPE_DOWN: "MENUE.CHILD"
-      SWIPE_LEFT: "OPENHAB.PREVIOUS"
-      SWIPE_RIGHT: "OPENHAB.NEXT"
-      ROTATION: "OPENHAB.WHEELDIMMER"
+      SWIPE_LEFT:
+        - "OPENHAB.CustomSwitch.<<"
+      SWIPE_RIGHT:
+        - "OPENHAB.CustomSwitch.>>"
+      ROTATION: "OPENHAB.Slider.WHEELDIMMER"
     # More modes can be added here
     menue:
       SWIPE_UP: "MENUE.PARENT"
@@ -28,3 +33,25 @@ key_mapping:
       SWIPE_RIGHT: "MENUE.NEXT"
       BUTTON_RELEASE: "MENUE.CHANGEMODE=default"
       ROTATION: "MENUE.WHEELNAVIGATION"
+
+
+command_icon_mapping:
+    OPENHAB.CustomSwitch.NEXT: "next"
+    OPENHAB.CustomSwitch.PREVIOUS: "previous"
+    OPENHAB.CustomSwitch.PLAY: "play"
+    OPENHAB.CustomSwitch.PAUSE: "pause"
+    OPENHAB.CustomSwitch.ON: "poweron"
+    OPENHAB.CustomSwitch.OFF: "poweroff"
+    OPENHAB.Switch.ON: "poweron"
+    OPENHAB.Switch.OFF: "poweroff"
+
+
+toggle_mapping:
+    PLAY: PAUSE
+    PAUSE: PLAY
+    ON: OFF
+    OFF: ON
+    UP: DOWN
+    DOWN: UP
+    OPEN: CLOSE
+    CLOSE: OPEN
