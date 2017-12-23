@@ -7,7 +7,6 @@ class OpenHabAppBuilder:
     def __init__(self, openhab : openHAB, sitemapName = "nuimo"):
         self.openhab = openhab
         self.sitemapName = sitemapName
-        self.rootItemName = "Nuimo"
 
     def buildApps(self):
         apps = []
@@ -17,16 +16,6 @@ class OpenHabAppBuilder:
         for widget in rootWidgets:
             widgetApps = self.createAppFromWidget(widget)
             for app in widgetApps: apps.append(app)
-
-        #nuimoRootItem = self.openhab.req_get("/items/"+self.rootItemName)
-
-        #if (nuimoRootItem["type"] == "Group" and "members" in nuimoRootItem):
-        #    for nuimoChildItem in nuimoRootItem["members"]:
-        #        app = self.createAppFromItem(nuimoChildItem)
-        #        apps.append(app)
-        #else:
-        #    app = self.createAppFromItem(nuimoRootItem)
-        #    apps.append(app)
 
         return apps
 
@@ -39,39 +28,24 @@ class OpenHabAppBuilder:
             for childWidget in widget["widgets"]:
                 childApps = self.createAppFromWidget(childWidget, parent)
                 for app in childApps: apps.append(app)
-        elif widget["type"] == "Group":
-            item = self.openhab.req_get("/items/" + widget["item"]["name"])
-            print(item)
-            self.createAppFromItem(item, parent)
-        elif widget["type"] == "Text":
+        elif widget["type"] == "Text" and "linkedPage" in widget or parent is None and widget["type"] in ["Switch", "Slider"]:
             icon = self.resolveIcon(widget["label"], widget["icon"])
-            app = App(name=widget["label"], appListener=OpenHabItemListener(self.openhab), icon=icon, parent=parent)
-            for childWidget in widget["linkedPage"]["widgets"]:
-                self.createAppFromWidget(childWidget, app)
+            openhabListener = OpenHabItemListener(self.openhab)
+            if widget["type"] != "Text":
+                openhabListener.addWidget(widget)
+            app = App(name=widget["label"], appListener=openhabListener, icon = icon, parent = parent)
+            if "linkedPage" in widget:
+                for childWidget in widget["linkedPage"]["widgets"]:
+                    self.createAppFromWidget(childWidget, app)
             apps.append(app)
-        else:
-            if widget["type"] == "Switch" and widget["mappings"]:
+        elif widget["type"] in ["Switch", "Slider"]:
+            if widget["mappings"]:
                 widget["type"] = "CustomSwitch"
             parent.getListener().addWidget(widget)
+        else:
+            raise RuntimeError("Unsupported widget: "+widget["type"]+" '"+widget["label"]+"'")
 
         return apps
-
-
-    def createAppFromItem(self, nuimoItem, parent: App = None):
-        print("Test")
-        label = nuimoItem["label"] if "label" in nuimoItem else nuimoItem["name"]
-        predefinedIcon = nuimoItem["category"] if "category" in nuimoItem else None
-        icon = self.resolveIcon(label, predefinedIcon)
-        itemListener = OpenHabItemListener(self.openhab)
-        itemListener.addItem(nuimoItem)
-        app = App(name=nuimoItem["name"], appListener=itemListener, icon=icon, parent=parent)
-
-        if "members" in nuimoItem:
-            for nuimoChildItem in nuimoItem["members"]:
-                if(nuimoChildItem["type"] == "Group"):
-                    self.createAppFromItem(nuimoChildItem, app)
-
-        return app
 
     def resolveIcon(self, label, predefinedIcon = None):
 
