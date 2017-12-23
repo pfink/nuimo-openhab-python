@@ -21,7 +21,7 @@ class ButtonRawEventHandler:
         result = None
         currentTime = time.time()
         if(rawEvent.value == ButtonEvents.RAWBUTTON_RELEASE.value):
-            if(self.lastEventTimestamp+0.5 > currentTime):
+            if(self.lastEventTimestamp+0.35 > currentTime):
                 self.clickCounter += 1
                 if self.clickCounter == 1:
                     result = ButtonEvents.BUTTON_CLICK
