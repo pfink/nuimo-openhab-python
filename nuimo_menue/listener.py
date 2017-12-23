@@ -58,18 +58,21 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
                 self.wheelReminder = 0
         else:
             gestureResult = self.nuimoMenue.getCurrentApp().getListener().received_gesture_event(event)
-            if event.gesture == nuimo.Gesture.ROTATION:
-                self.showRotationState(percent=gestureResult)
-            else:
-                self.show_command_icon(fqCommand=gestureResult)
+            if gestureResult is not None:
+                if event.gesture == nuimo.Gesture.ROTATION:
+                    self.showRotationState(percent=gestureResult)
+                else:
+                    self.show_command_icon(fqCommand=gestureResult)
 
     def show_command_icon(self, fqCommand: str):
         print("Looking for "+str(fqCommand))
         print(str(config["command_icon_mapping"]))
-        if fqCommand in config["command_icon_mapping"] and config["command_icon_mapping"][fqCommand] in icons:
-            icon = icons[config["command_icon_mapping"][fqCommand]]
-            self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icon))
-
+        if fqCommand in config["command_icon_mapping"]:
+            if config["command_icon_mapping"][fqCommand] in icons:
+                icon = icons[config["command_icon_mapping"][fqCommand]]
+                self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icon))
+            else: raise RuntimeWarning("Icon '"+config["command_icon_mapping"][fqCommand]+"' mapped to command '"+fqCommand+"' does not exist")
+        else: raise RuntimeWarning("No icon mapped to'"+fqCommand+"'")
         #if event.gesture == ButtonEvents.BUTTON_CLICK:
         #    "play"]))
         #if event.gesture == nuimo.Gesture.TOUCH_BOTTOM:
