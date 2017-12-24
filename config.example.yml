@@ -44,6 +44,8 @@ command_icon_mapping:
     OPENHAB.CustomSwitch.OFF: "poweroff"
     OPENHAB.Switch.ON: "poweron"
     OPENHAB.Switch.OFF: "poweroff"
+    OPENHAB.Switch.100: "poweron"
+    OPENHAB.Switch.0: "poweroff"
 
 
 toggle_mapping:
@@ -55,3 +57,5 @@ toggle_mapping:
     DOWN: UP
     OPEN: CLOSE
     CLOSE: OPEN
+    "100": "0"
+    "0": "100"
