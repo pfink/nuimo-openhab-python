@@ -1,0 +1,20 @@
+# SIMPLE KEYMAP
+#
+# This keymaps can be used for simple setups where no menu hierarchies are used.
+# You can navigate between apps with SWIPE_UP / SWIPE_DOWN
+
+key_mapping:
+    # Default mode is mandatory and the initial key mapping after nuimo startup
+    default:
+      # The mode can be changed with the MENUE.CHANGEMODE=newmode command. "newmode" must be a mode that is listed in this key mapping
+      BUTTON_HOLD: "MENUE.SHOWAPP"
+      BUTTON_CLICK:
+        - "OPENHAB.Switch.TOGGLE"
+        - "OPENHAB.CustomSwitch.TOGGLEIFPLAYER"   # Workaround making default Player elements work without extra config. Toggles PLAY/PAUSE if it's a player element.
+      SWIPE_UP: "MENUE.PREVIOUS"
+      SWIPE_DOWN: "MENUE.NEXT"
+      SWIPE_LEFT:
+        - "OPENHAB.CustomSwitch.<<"               # Workaround making default Player elements work without extra config
+      SWIPE_RIGHT:
+        - "OPENHAB.CustomSwitch.>>"               # Workaround making default Player elements work without extra config
+      ROTATION: "OPENHAB.Slider.WHEELDIMMER"
