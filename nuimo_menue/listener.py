@@ -32,7 +32,6 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
     def handle_gesture_event(self, event):
         mappedCommands = config.get_mapped_commands(gesture=event.gesture, mode=self.nuimoMenue.currentMode, namespace="MENUE")
         if mappedCommands:
-            print(str(mappedCommands))
             mappedCommand = mappedCommands[0]
 
             print("Current Mode: " + str(self.nuimoMenue.currentMode))
@@ -65,8 +64,6 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
                     self.show_command_icon(fqCommand=gestureResult)
 
     def show_command_icon(self, fqCommand: str):
-        print("Looking for "+str(fqCommand))
-        print(str(config["command_icon_mapping"]))
         if fqCommand in config["command_icon_mapping"]:
             if config["command_icon_mapping"][fqCommand] in icons:
                 icon = icons[config["command_icon_mapping"][fqCommand]]

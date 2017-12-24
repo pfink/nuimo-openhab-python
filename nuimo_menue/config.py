@@ -23,7 +23,6 @@ class NuimoMenueConfiguration:
 
 
     def get_mapped_commands(self, gesture: AdvancedGesture, mode: str = "default", namespace: str = None):
-        print(gesture.name)
         mapped_commands = []
         currentModeKeys = self.key_mapping[mode]
         if gesture.name in currentModeKeys:

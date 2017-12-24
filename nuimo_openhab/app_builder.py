@@ -20,9 +20,7 @@ class OpenHabAppBuilder:
         return apps
 
     def createAppFromWidget(self, widget, parent: App = None):
-        print("Test")
         apps = []
-        print(widget["type"])
         # Ignore Frames
         if widget["type"] == "Frame":
             for childWidget in widget["widgets"]:
