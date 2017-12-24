@@ -1,0 +1,29 @@
+# The key mapping in this example file contains 2 modes:
+# - the default mode which is used to control the currently the selected app / item
+# - the menue mode which allows to select other apps / items
+# The menue mode is active while the button is pressed.
+# So you can navigate between your apps / items as long as you hold the button.
+key_mapping:
+    # Default mode is mandatory and the initial key mapping after nuimo startup
+    default:
+      # The mode can be changed with the MENUE.CHANGEMODE=newmode command. "newmode" must be a mode that is listed in this key mapping
+      BUTTON_PRESS: "MENUE.CHANGEMODE=menue"
+      BUTTON_HOLD: "MENUE.SHOWAPP"
+      BUTTON_CLICK:
+        - "OPENHAB.Switch.TOGGLE"
+        - "OPENHAB.CustomSwitch.TOGGLEIFPLAYER"   # Workaround making default Player elements work without extra config. Toggles PLAY/PAUSE if it's a player element.
+      SWIPE_UP: "MENUE.PARENT"
+      SWIPE_DOWN: "MENUE.CHILD"
+      SWIPE_LEFT:
+        - "OPENHAB.CustomSwitch.<<"               # Workaround making default Player elements work without extra config
+      SWIPE_RIGHT:
+        - "OPENHAB.CustomSwitch.>>"               # Workaround making default Player elements work without extra config
+      ROTATION: "OPENHAB.Slider.WHEELDIMMER"
+    # More modes can be added here
+    menue:
+      SWIPE_UP: "MENUE.PARENT"
+      SWIPE_DOWN: "MENUE.CHILD"
+      SWIPE_LEFT: "MENUE.PREVIOUS"
+      SWIPE_RIGHT: "MENUE.NEXT"
+      BUTTON_RELEASE: "MENUE.CHANGEMODE=default"
+      ROTATION: "MENUE.WHEELNAVIGATION"
