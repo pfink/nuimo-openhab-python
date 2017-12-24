@@ -13,7 +13,7 @@ class Main:
 
     def run(self):
         openhab = openHAB(config["openhab_api_url"])
-        apps = OpenHabAppBuilder(openhab).buildApps()
+        apps = OpenHabAppBuilder(openhab, config["openhab_sitemap"]).buildApps()
 
         manager = nuimo.ControllerManager(adapter_name=config["bluetooth_adapter"])
         manager.is_adapter_powered = True
