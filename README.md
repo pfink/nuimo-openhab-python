@@ -21,32 +21,103 @@ An application based on [getsenic/nuimo-linux-python](https://github.com/getseni
 1. You may have to merge the newest version of `config.example.yml` to your `config.yml`
 1. Consider the release notes whether more actions are required
 
+## Keymap Configuration
+
+TBD
+
 ## openHAB Configuration
 
-Before you start the App, you should configure the openHAB-side to define which items you want to control with your Nuimo.
+Before you start the App, you have to configure the openHAB-side to define which items you want to control with your Nuimo.
 
-1. Create a group item with the name *Nuimo* on your openHAB and add items you want to control with the Nuimo to that Group.
-1. Make sure that every group member defines an icon. There are two ways of defining an icon for an item:
-    1. Put the name of a [predefined icon](https://gist.github.com/pfink/7a468eb906644dc570cc28acb7c4d2b7) into the `<icon>` tag.
-    1. Alternatively, you can put use labels to define the icons showed on the 9x9 Nuimo LED matrix. The label have to be a string of the length of 81 chars (9x9) and consist of asterisks(`*`) for led=on and spaces (` `) for led=off.
-1. You can nest groups to create menu hierarchies.
+### Getting started
 
-Please find an example configuration below:
+1. Create a [sitemap](https://docs.openhab.org/configuration/sitemaps.html) with the name *nuimo* on your openHAB instance (in case you have multiple Nuimo's, you can change the name of
+   sitemap used within your config.yml).
+1. Add elements / items you want to control with the Nuimo to that Group. As the possibilities of the Nuimo serving as a 
+   UI are limited, only a small subset of [element types](https://docs.openhab.org/configuration/sitemaps.html#element-types) are supported:
+   - `Switch`: Is used to map the Nuimo buttons to specific items / commands.
+   - `Slider`: Is used to bind the Nuimo wheel to specific items.
+   - `Text`: Is used to aggregate items to several "apps" among those you can navigate with the Nuimo.
+   - `Default`: Partially supported. It works as long as it is internally resolved to a `Switch` or `Slider` element
+     which is true for some item types (e.g. `Switch`, `Dimmer`, `Player`).
+   - `Frame`: This element type is allowed, but is ignored. Aggregation is done with `Text` elements because they're
+   more flexible, especially they can be nested.
+   
+   All other element types are not allowed and the application won't start if they're used.
+   
+   [Blocks](https://docs.openhab.org/configuration/sitemaps.html#concepts) are only allowed (and mandatory) on `Frame` and `Text` elements. Nesting is supported without any limitations.
+   
+   [Mappings](https://docs.openhab.org/configuration/sitemaps.html#mappings) are supported. Please find all details how
+   to use mappings [below](https://github.com/pfink/nuimo-openhab-python#mappings--custom-switch-configuration).
+   
+   Labels are supported in the way that error messages thrown by this application usually contain the label of the affected item.
+1. Make sure that every `Text` element defines a 9x9 LED icon (as well as `Switch`, `Slider` and `Default` elements
+   if they're not a child of a `Text` element). There are two ways of defining such an icon for an item:
+    1. Add the name of a [predefined icon](https://gist.github.com/pfink/7a468eb906644dc570cc28acb7c4d2b7) with the `icon` parameter of the sitemap element or the `<icon>` tag of the bound item.
+    1. Alternatively, you can use labels to define the icons showed on the 9x9 Nuimo LED matrix. The label have to be a 
+       string of the length of 81 chars (9x9) and consist of asterisks(`*`) for led=on and spaces (` `) for led=off.
+       In case you create custom icons, it would be great if you contribute them so that the number of predefined icons
+       grows! Just leave a comment with your icon [here](https://gist.github.com/pfink/7a468eb906644dc570cc28acb7c4d2b7#comments).
+
+### Example Sitemap Configuration
 
 ```
-Group Nuimo
-
-Group:String:AVG MyLamp <light> (Nuimo)
-Group:String:AVG MyMusic <music> (Nuimo)
-Group:String:AVG PlayerGuestroom <letterG> (MyMusic)
-Group:String:AVG PlayerBedroomWithCustomIcon "******** *       **       **      * *******  *      * *       **       ********* " (Nuimo)
+sitemap nuimo
+{
+    Text label="Multiroom Audio System" icon="music" {
+        Switch item=AllRooms_Player mappings=[TOGGLE=BUTTON_CLICK]
+        Slider item=AllRooms_Volume
+        
+        Text label="Audio Bedroom" icon="letterB" {
+            Default item=Bedroom_Player
+            Slider item=Bedroom_Volume
+        }
+        Text label="Audio Guest Room" icon="letterG" {
+            Default item=GuestRoom_Player
+            Slider item=GuestRoom_Volume
+        }
+    }
+    Slider item=Simple_Light icon="light"
+    
+    Text label="Simple Light" icon="letterO" {
+        Switch item=Simple_Light
+        Slider item=Simple_Light
+    }
+}
 ```
 
-This will define 4 group items (`MyLamp` and `MyMusic` with it's childs `PlayerGuestroom` (led icon is a "G") and `PlayerBedroomWithCustomIcon` (led icon is a custom "B")) that can be controlled via Nuimo. Each "real item" you add to one of those 4 groups will receive the commands sent via the nuimo to that particular group.
+This configuration defines 4 _apps_ on root level between those you can navigate:
+- A multiroom audio system where you can control the music (Play/Pause) and volume of all rooms.
+  In addition, you can jump into a sub-menu that you can use to control the music of the single rooms (here: _Bedroom_ and _Guest Room_)
+- A light that you can only control with the wheel of the nuimo
+- The same light again, but with a different configuration: Here you can use the wheel AND the button to control the light.
+
+Some noteworthy details about this example configuration:
+- For `Bedroom_Player` and `Guestroom_Player` (both are `Player` items), the `Default` element is used.
+  This causes openHAB to create a Switch with a mapping for PLAY/PAUSE and PREVIOUS/NEXT controls. This application
+  is already preconfigured so that not only PLAY/PAUSE can be used, but also PREVIOUS/NEXT (by swiping left/right).
+- For `AllRooms_Player`, the `Switch` element is used instead which will suppress the special mapping so that just
+  `ON`/`OFF` commands are sent. This can be useful e.g. to suppress the possibility for previous/next commands because
+  they'll maybe executed multiple times when different rooms are grouped together.
+
+All explanations refer to the default keymap configuration within `config.example.yml`. Limitations or differences may apply to deviant keymap configurations.
+
+### Mappings / Custom Switch Configuration
+
+[Mappings](https://docs.openhab.org/configuration/sitemaps.html#mappings) can be used to customize the mapping from
+Nuimo gesture to openHAB command for each item so you're able to create customized keymaps on item level. Mappings
+should always have the structure: `[OPENHAB_COMMAND1=NUIMO_GESTURE1, OPENHAB_COMMAND2=NUIMO_GESTURE2, ..]`
+
+Some examples: 
+```
+Switch MyCustomPlayer mappings=[TOGGLE=BUTTON_CLICK, NEXT=SWIPE_RIGHT, PREVIOUS=SWIPE_LEFT, REWIND=TOUCH_LEFT, FASTFORWARD=TOUCH_RIGHT]
+Switch MyCustomLight mappings=[OFF=SWIPE_LEFT, ON=SWIPE_RIGHT]
+Switch MyCustomDimmer mappings=[INCREASE=FLY_LEFT, DEACREASE=FLY_RIGHT]
+```
+
+You can find a list of all available Nuimo gestures [here](https://github.com/getsenic/nuimo-linux-python/blob/0.3.6/nuimo/nuimo.py#L398).
 
 ## Start the application
-
-### Installed from source
 
 ```
 cd nuimo-openhab-python
@@ -55,13 +126,25 @@ python3 main.py
 
 ## Usage
 
-Swipe up and down to navigate between the items. Swipe left and right to switch in our out of a group. Using the "turning knob" will always send Dimmer commands (from 0 to 100) - this can only work, if the item you bound holds a dimmer state (Number from 0 to 100). Other gestures will trigger openHAB commands as configured within the *config.yml*.
+Usage depends on which [keymap](examples/keymaps) you use.
+
+**Default Keymap:** You can navigate between apps with swipes as well as with the wheel **only as long as you hold the button**.
+Swipe up+down: Go up or down the hierarchy. Wheel / Swipe left+right: Navigate between apps on the same hierarchy. When
+the button is not hold, by default a short button click sends a TOGGLE command to switches while the wheel will control
+the Slider elements.
+
+**Simple Keymap:** 
+Swipe up+down: Navigate between apps (hierarchies are NOT supported by this keymap).
+A short button click sends a TOGGLE command to switches while the wheel will control the Slider elements.
 
 ## Roadmap
 - [x] Extend configuration possibilities & usability
-- [ ] Add alternative key mapping examples and introduction video for the recommended key mapping
+- [ ] Add `sendFrequency` support for sliders
+- [ ] Add support for `Setpoint`s
+- [ ] Add support for the FLY_UPDOWN gesture
+- [ ] Add more alternative key mapping examples and introduction video for the recommended key mapping
 - [ ] Logging
 - [x] Support icon sets
-- [ ] Nuimo should be bound on a sitemap instead to the *Nuimo* group item. This will make the configuration more flexible and robust.
+- [x] Nuimo should be bound on a sitemap instead to the *Nuimo* group item. This will make the configuration more flexible and robust.
 - [x] It should be possible to "jump into" a group so that you can navigate with the Nuimo similar to other UIs
 - [ ] Improve stability & robustness
