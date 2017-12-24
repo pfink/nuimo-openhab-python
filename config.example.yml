@@ -17,13 +17,13 @@ key_mapping:
       BUTTON_HOLD: "MENUE.SHOWAPP"
       BUTTON_CLICK:
         - "OPENHAB.Switch.TOGGLE"
-        - "OPENHAB.CustomSwitch.TOGGLE"
+        - "OPENHAB.CustomSwitch.TOGGLEIFPLAYER"   # Workaround making default Player elements work without extra config. Toggles PLAY/PAUSE if it's a player element.
       SWIPE_UP: "MENUE.PARENT"
       SWIPE_DOWN: "MENUE.CHILD"
       SWIPE_LEFT:
-        - "OPENHAB.CustomSwitch.<<"
+        - "OPENHAB.CustomSwitch.<<"               # Workaround making default Player elements work without extra config
       SWIPE_RIGHT:
-        - "OPENHAB.CustomSwitch.>>"
+        - "OPENHAB.CustomSwitch.>>"               # Workaround making default Player elements work without extra config
       ROTATION: "OPENHAB.Slider.WHEELDIMMER"
     # More modes can be added here
     menue:

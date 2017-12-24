@@ -44,6 +44,23 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
             print("Mapped command openHAB: " + str(mappedCommands) + "(requested namespace: "+namespace+")")
 
             for command in mappedCommands:
+
+                # Special handling for mappings
+                noMappingFound = False
+                if widget["type"] == "CustomSwitch":
+                    for mapping in widget["mappings"]:
+                        noMappingFound = True
+                        if mapping["label"] == command or mapping["label"] == event.gesture.name:
+                            command = mapping["command"]
+                            noMappingFound = False
+                            break;
+                        # Workaround for toggling players
+                        elif mapping["label"] == ">" and command == "TOGGLEIFPLAYER":
+                            command = "TOGGLE"
+                            noMappingFound = False
+                            break;
+
+                # Special handling for TOGGLE
                 if command == "TOGGLE":
                     state = requests.get(self.openhab.base_url + "/items/" + widget["item"]["name"] + "/state").text
                     if state in config["toggle_mapping"]:
@@ -51,17 +68,10 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                     else:
                         raise RuntimeWarning("There is no toggle counterpart known for state '"+state+"'. Skip TOGGLE command.")
 
-                if widget["type"] == "CustomSwitch":
-                    for mapping in widget["mappings"]:
-                        if mapping["label"] == command:
-                            command = mapping["command"]
-                            break;
-
-                self.openhab.req_post("/items/" + widget["item"]["name"], command)
-
-            # Push back command executed, full qualified command for action icon
-            if mappedCommands:
-                gestureResult = namespace + "." + command
+                if not noMappingFound:
+                    self.openhab.req_post("/items/" + widget["item"]["name"], command)
+                    # Push back command executed, full qualified command for action icon
+                    gestureResult = namespace + "." + command
 
             return gestureResult
 
