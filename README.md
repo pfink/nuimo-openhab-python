@@ -1,8 +1,8 @@
-# nuimo-openhab-python (Alpha)
+# Nuimo openHAB Integration (Alpha)
 
 [![Join the chat at https://gitter.im/nuimo-openhab-python/Lobby](https://badges.gitter.im/nuimo-openhab-python/Lobby.svg)](https://gitter.im/nuimo-openhab-python/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-An application based on [getsenic/nuimo-linux-python](https://github.com/getsenic/nuimo-linux-python) to use your Nuimo as a UI for OpenHab! This project is in a very early state of development - so please be prepared that the configuration capabilities are quite limited at the moment and that there will be bugs and unexpected behaviour.
+An application based on [getsenic/nuimo-linux-python](https://github.com/getsenic/nuimo-linux-python) to use your Nuimo as a UI for openHAB!
 
 ## Installation (Linux only)
 
@@ -139,6 +139,7 @@ A short button click sends a TOGGLE command to switches while the wheel will con
 
 ## Roadmap
 - [x] Extend configuration possibilities & usability
+- [ ] Add recommended way of installing and running this as a service
 - [ ] Add `sendFrequency` support for sliders
 - [ ] Add support for `Setpoint`s
 - [ ] Add support for the FLY_UPDOWN gesture
