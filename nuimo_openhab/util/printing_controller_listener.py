@@ -1,21 +1,22 @@
 import nuimo
+import logging
 
 class PrintingControllerListener(nuimo.ControllerListener):
     def received_gesture_event(self, event):
         if isinstance(event, nuimo.GestureEvent):
-            print(event.value)
+            logging.info("Received gesture: %s", event.value)
 
     def started_connecting(self):
-        print("Connecting...")
+        logging.info("Connecting...")
 
     def connect_succeeded(self):
-        print("Connecting succeeded!")
+        logging.info("Connecting succeeded!")
 
     def connect_failed(self, error):
-        print("Connecting failed!")
+        logging.info("Connecting failed!")
 
     def started_disconnecting(self):
-        print("Disconnecting...")
+        logging.info("Disconnecting...")
 
     def disconnect_succeeded(self):
-        print("Nuimo disconnected!")
+        logging.info("Nuimo disconnected!")

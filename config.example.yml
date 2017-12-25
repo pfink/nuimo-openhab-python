@@ -4,6 +4,10 @@ nuimo_mac_address: "96:EC:C6:4D:05:BA"
 bluetooth_adapter: hci0
 rotation_icon: circle
 
+log_file: "nuimo-openhab.log"
+log_level: INFO
+log_stdout: true
+
 # The key mapping in this example file contains 2 modes:
 # - the default mode which is used to control the currently the selected app / item
 # - the menue mode which allows to select other apps / items

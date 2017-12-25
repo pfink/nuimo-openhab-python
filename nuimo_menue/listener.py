@@ -7,6 +7,7 @@ from nuimo_menue import icons
 from nuimo_menue.model import NuimoMenue
 from nuimo_openhab.util import config
 from util.button import *
+import logging
 
 
 class NuimoMenueControllerListener(nuimo.ControllerListener):
@@ -34,8 +35,8 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
         if mappedCommands:
             mappedCommand = mappedCommands[0]
 
-            print("Current Mode: " + str(self.nuimoMenue.currentMode))
-            print("Mapped Command: " + str(mappedCommand))
+            logging.debug("Current Mode: " + str(self.nuimoMenue.currentMode))
+            logging.debug("Mapped Command: " + str(mappedCommand))
 
             if "CHANGEMODE" in mappedCommand:
                 self.nuimoMenue.currentMode = mappedCommand.split("=")[1]
@@ -48,7 +49,7 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             elif mappedCommand == "PREVIOUS":
                 self.nuimoMenue.navigateToPreviousApp()
             elif mappedCommand == "SHOWAPP":
-                print("Name: "+self.nuimoMenue.getCurrentApp().getName())
+                logging.debug("Name: "+self.nuimoMenue.getCurrentApp().getName())
                 self.nuimoMenue.showIcon()
             elif mappedCommand == "WHEELNAVIGATION":
                 self.wheelNavigation(event)
@@ -68,8 +69,8 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             if config["command_icon_mapping"][fqCommand] in icons:
                 icon = icons[config["command_icon_mapping"][fqCommand]]
                 self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icon))
-            else: raise RuntimeWarning("Icon '"+config["command_icon_mapping"][fqCommand]+"' mapped to command '"+fqCommand+"' does not exist")
-        else: raise RuntimeWarning("No icon mapped to'"+fqCommand+"'")
+            else: logging.warning("Icon '"+config["command_icon_mapping"][fqCommand]+"' mapped to command '"+fqCommand+"' does not exist")
+        else: logging.warning("No icon mapped to'"+fqCommand+"'")
         #if event.gesture == ButtonEvents.BUTTON_CLICK:
         #    "play"]))
         #if event.gesture == nuimo.Gesture.TOUCH_BOTTOM:
@@ -81,22 +82,22 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
 
 
     def started_connecting(self):
-        print("Connecting...")
+        logging.info("Connecting...")
 
     def connect_succeeded(self):
         self.connected = True
-        print("Connecting succeeded!")
+        logging.info("Connecting succeeded!")
 
     def connect_failed(self, error):
-        print("Connecting failed!")
+        logging.info("Connecting failed!")
 
     def started_disconnecting(self):
-        print("Disconnecting...")
+        logging.info("Disconnecting...")
 
     def disconnect_succeeded(self):
         self.connected = False
         self.attempt_reconnect()
-        print("Nuimo disconnected!")
+        logging.info("Nuimo disconnected!")
 
     def attempt_reconnect(self):
         while (not self.connected):

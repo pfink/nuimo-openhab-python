@@ -1,5 +1,5 @@
 import nuimo
-
+import logging
 
 class AppListener(nuimo.ControllerListener):
     def __init__(self, app):
@@ -8,7 +8,7 @@ class AppListener(nuimo.ControllerListener):
 
 class App:
     def __init__(self, name, icon: nuimo.LedMatrix, appListener: AppListener, parent = None):
-        print("Create app: " + name + "(parent: "+ str(parent)+ ")")
+        logging.info("Create app: " + name + "(parent: "+ str(parent)+ ")")
         self.appListener = appListener
         self.icon = icon
         self.name = name

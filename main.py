@@ -23,16 +23,16 @@ class Main:
                 self.main = main
             def controller_discovered(self, controller):
                 self.main.controller = controller
-                print("Discovered Nuimo controller:", controller.mac_address)
+                logging.info("Discovered Nuimo controller: %s", controller.mac_address)
                 if (controller.mac_address == str(config["nuimo_mac_address"]).lower()):
-                    print("Found configured Nuimo with MAC address " + config["nuimo_mac_address"])
+                    logging.info("Found configured Nuimo with MAC address " + config["nuimo_mac_address"])
                     # Initialize App
                     menue = NuimoMenue(apps=apps, controller=controller)
                     controller.listener = NuimoMenueControllerListener(menue)
                     controller.connect()
                     menue.showIcon()
                 else:
-                    print("Discovered Nuimo " + controller.mac_address + " does not match with configured " + config[
+                    logging.info("Discovered Nuimo " + controller.mac_address + " does not match with configured " + config[
                         "nuimo_mac_address"] + ". Continue discovery...")
 
         manager.listener = ControllerManagerDiscoveryListener(self)
@@ -45,8 +45,9 @@ class Main:
 
     def exit_gracefully(self):
         if hasattr(self, 'controller'):
-            print('Disconnecting...')
+            logging.info('Disconnecting...')
             self.controller.disconnect()
+        logging.shutdown()
         sys.exit(0)
 
 

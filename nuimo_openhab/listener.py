@@ -1,4 +1,5 @@
 import sys
+import logging
 import time
 
 import nuimo
@@ -41,7 +42,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
         for widget in self.widgets:
             namespace = "OPENHAB." + widget["type"]
             mappedCommands = config.get_mapped_commands(gesture=event.gesture, namespace=namespace)
-            print("Mapped command openHAB: " + str(mappedCommands) + "(requested namespace: "+namespace+")")
+            logging.debug("Mapped command openHAB: " + str(mappedCommands) + "(requested namespace: "+namespace+")")
 
             for command in mappedCommands:
 
@@ -66,7 +67,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                     if state in config["toggle_mapping"]:
                         command = config["toggle_mapping"][state]
                     else:
-                        raise RuntimeWarning("There is no toggle counterpart known for state '"+state+"'. Skip TOGGLE command.")
+                        logging.warning("There is no toggle counterpart known for state '"+state+"'. Skip TOGGLE command.")
 
                 if not noMappingFound:
                     self.openhab.req_post("/items/" + widget["item"]["name"], command)
@@ -81,7 +82,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
             self.reminder += valueChange
             if (abs(self.reminder) >= 1):
                 self.openhab.req_post("/items/" + widget["item"]["name"], "REFRESH")
-                print(self.openhab.base_url + widget["item"]["name"] + "/state")
+                logging.debug(self.openhab.base_url + widget["item"]["name"] + "/state")
                 try:
                     currentTimestamp = int(round(time.time() * 1000))
                     if (self.lastDimmerItemTimestamp < currentTimestamp-3000):
@@ -92,17 +93,17 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                         if (currentState < 1):
                             currentState *= 100
                         currentState = int(currentState)
-                        print("Raw item state: "+itemStateRaw)
+                        logging.debug("Raw item state: "+itemStateRaw)
                     else:
                         currentState = self.lastDimmerItemState
-                    print("Old state: " + str(currentState))
+                    logging.debug("Old state: " + str(currentState))
                     newState = currentState+round(self.reminder)
                     if (newState < 0):
                         newState = 0
                     if (newState > 100):
                         newState = 100
 
-                    print("New state: " + str(newState))
+                    logging.debug("New state: " + str(newState))
 
                     self.lastDimmerItemState = newState
                     self.lastDimmerItemTimestamp = currentTimestamp
@@ -110,7 +111,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                     self.openhab.req_post("/items/" + widget["item"]["name"], str(newState))
                 except Exception:
                     newState = 0
-                    print(sys.exc_info())
+                    logging.error(sys.exc_info())
                 finally:
                     self.reminder = 0
         return self.lastDimmerItemState
