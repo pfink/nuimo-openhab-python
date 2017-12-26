@@ -40,10 +40,10 @@ Before you start the App, you have to configure the openHAB-side to define which
    - `Text`: Is used to aggregate items to several "apps" among those you can navigate with the Nuimo.
    - `Default`: Partially supported. It works as long as it is internally resolved to a `Switch` or `Slider` element
      which is true for some item types (e.g. `Switch`, `Dimmer`, `Player`).
-   - `Frame`: This element type is allowed, but is ignored. Aggregation is done with `Text` elements because they're
+   - `Frame`: This element type is allowed, but ignored. Aggregation is done with `Text` elements because they're
    more flexible, especially they can be nested.
    
-   All other element types are not allowed and the application won't start if they're used.
+   All other element types are *not* allowed and the application won't start if they're used.
    
    [Blocks](https://docs.openhab.org/configuration/sitemaps.html#concepts) are only allowed (and mandatory) on `Frame` and `Text` elements. Nesting is supported without any limitations.
    
@@ -51,7 +51,7 @@ Before you start the App, you have to configure the openHAB-side to define which
    to use mappings [below](https://github.com/pfink/nuimo-openhab-python#mappings--custom-switch-configuration).
    
    Labels are supported in the way that error messages thrown by this application usually contain the label of the affected item.
-1. Make sure that every `Text` element defines a 9x9 LED icon (as well as `Switch`, `Slider` and `Default` elements
+1. Make sure that each `Text` element defines a 9x9 LED icon (as well as `Switch`, `Slider` and `Default` elements
    if they're not a child of a `Text` element). There are two ways of defining such an icon for an item:
     1. Add the name of a [predefined icon](https://gist.github.com/pfink/7a468eb906644dc570cc28acb7c4d2b7) with the `icon` parameter of the sitemap element or the `<icon>` tag of the bound item.
     1. Alternatively, you can use labels to define the icons showed on the 9x9 Nuimo LED matrix. The label have to be a 
@@ -86,7 +86,7 @@ sitemap nuimo
 }
 ```
 
-This configuration defines 4 _apps_ on root level between those you can navigate:
+This configuration defines 3 _apps_ on root level between those you can navigate:
 - A multiroom audio system where you can control the music (Play/Pause) and volume of all rooms.
   In addition, you can jump into a sub-menu that you can use to control the music of the single rooms (here: _Bedroom_ and _Guest Room_)
 - A light that you can only control with the wheel of the nuimo
@@ -112,7 +112,7 @@ Some examples:
 ```
 Switch MyCustomPlayer mappings=[TOGGLE=BUTTON_CLICK, NEXT=SWIPE_RIGHT, PREVIOUS=SWIPE_LEFT, REWIND=TOUCH_LEFT, FASTFORWARD=TOUCH_RIGHT]
 Switch MyCustomLight mappings=[OFF=SWIPE_LEFT, ON=SWIPE_RIGHT]
-Switch MyCustomDimmer mappings=[INCREASE=FLY_LEFT, DEACREASE=FLY_RIGHT]
+Switch MyCustomDimmer mappings=[INCREASE=FLY_LEFT, DECREASE=FLY_RIGHT]
 ```
 
 You can find a list of all available Nuimo gestures [here](https://github.com/getsenic/nuimo-linux-python/blob/0.3.6/nuimo/nuimo.py#L398).
@@ -134,7 +134,7 @@ the button is not hold, by default a short button click sends a TOGGLE command t
 the Slider elements.
 
 **Simple Keymap:** 
-Swipe up+down: Navigate between apps (hierarchies are NOT supported by this keymap).
+Swipe up+down: Navigate between apps (hierarchies / nexted `Text` elements are NOT supported by this keymap).
 A short button click sends a TOGGLE command to switches while the wheel will control the Slider elements.
 
 ## Roadmap
