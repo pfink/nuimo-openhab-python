@@ -33,8 +33,8 @@ Before you start the App, you have to configure the openHAB-side to define which
 
 1. Create a [sitemap](https://docs.openhab.org/configuration/sitemaps.html) with the name *nuimo* on your openHAB instance (in case you have multiple Nuimo's, you can change the name of
    sitemap used within your config.yml).
-1. Add elements / items you want to control with the Nuimo to that Group. As the possibilities of the Nuimo serving as a 
-   UI are limited, only a small subset of [element types](https://docs.openhab.org/configuration/sitemaps.html#element-types) are supported:
+1. Add elements / items you want to control with the Nuimo to that sitemap. As the possibilities of the Nuimo serving as a 
+   UI are limited, only a small subset of [element types](https://docs.openhab.org/configuration/sitemaps.html#element-types) is supported:
    - `Switch`: Is used to map the Nuimo buttons to specific items / commands.
    - `Slider`: Is used to bind the Nuimo wheel to specific items.
    - `Text`: Is used to aggregate items to several "apps" among those you can navigate with the Nuimo.
