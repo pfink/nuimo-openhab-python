@@ -4,7 +4,6 @@ import logging
 class AppListener(nuimo.ControllerListener):
     def __init__(self, app):
         self.app = app
-    pass
 
 class App:
     def __init__(self, name, icon: nuimo.LedMatrix, appListener: AppListener, parent = None):
@@ -32,8 +31,6 @@ class App:
 
     def getChildren(self):
         return self.children
-
-    pass
 
 class NuimoMenue:
 

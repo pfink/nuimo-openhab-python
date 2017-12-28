@@ -151,5 +151,3 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
 
             matrix = nuimo.LedMatrix("".join(currentRotationString))
             self.nuimoMenue.controller.display_matrix(matrix=matrix,fading=True, ignore_duplicates=True)
-        pass
-    pass
