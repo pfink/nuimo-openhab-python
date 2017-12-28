@@ -14,8 +14,8 @@ class NuimoOpenHabConfiguration(NuimoMenueConfiguration):
     def __getitem__(self, item):
         return self.config[item]
 
-
-NUIMO_OPENHAB_CONFIG_PATH = os.getenv('NUIMO_OPENHAB_CONFIG_PATH', 'config.yml')
+project_root_dir = os.path.dirname(sys.argv[0])
+NUIMO_OPENHAB_CONFIG_PATH = os.getenv('NUIMO_OPENHAB_CONFIG_PATH', os.path.join(project_root_dir, 'config.yml'))
 
 with open(NUIMO_OPENHAB_CONFIG_PATH, 'r') as ymlfile:
     rawConfig = yaml.safe_load(ymlfile)

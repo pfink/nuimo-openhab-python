@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from nuimo_menue.listener import *
 from nuimo_openhab.app_builder import *
 from nuimo_openhab.util import config
