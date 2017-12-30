@@ -42,26 +42,22 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
         for widget in self.widgets:
             namespace = "OPENHAB." + widget["type"]
             mappedCommands = config.get_mapped_commands(gesture=event.gesture, namespace=namespace)
-            logging.debug("Mapped command openHAB: " + str(mappedCommands) + "(requested namespace: "+namespace+")")
+            # Add additional commands defined via custom mapping
+            customCommand = self.resolveCustomMappings(widget["mappings"], event.gesture.name)
+            if customCommand is not None:
+                mappedCommands.append(customCommand)
+
+            logging.debug("Mapped command openHAB: " + str(mappedCommands) + "(requested namespace: " + namespace + ")")
 
             for command in mappedCommands:
+                # Special handling for mappings:
+                # On custom switches (=switches with mappings), mapped commands have another meaning:
+                # they define "extra mapping labels" that CAN be used within mappings, but don't have to
+                # if those extra mapping labels are not used within the current widget, command is resolved as None and skipped
+                if widget["type"] == "CustomSwitch" and command != customCommand:
+                    command = self.resolveCustomMappings(widget["mappings"], command)
 
-                # Special handling for mappings
-                noMappingFound = False
-                if widget["type"] == "CustomSwitch":
-                    for mapping in widget["mappings"]:
-                        noMappingFound = True
-                        if mapping["label"] == command or mapping["label"] == event.gesture.name:
-                            command = mapping["command"]
-                            noMappingFound = False
-                            break;
-                        # Workaround for toggling players
-                        elif mapping["label"] == ">" and command == "TOGGLEIFPLAYER":
-                            command = "TOGGLE"
-                            noMappingFound = False
-                            break;
-
-                # Special handling for TOGGLE
+                # Special handling for TOGGLE: Resolve state first to be able showing the correct action icon
                 if command == "TOGGLE":
                     state = requests.get(self.openhab.base_url + "/items/" + widget["item"]["name"] + "/state").text
                     if state in config["toggle_mapping"]:
@@ -69,12 +65,20 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                     else:
                         logging.warning("There is no toggle counterpart known for state '"+state+"'. Skip TOGGLE command.")
 
-                if not noMappingFound:
+                if command is not None:
                     self.openhab.req_post("/items/" + widget["item"]["name"], command)
                     # Push back command executed, full qualified command for action icon
                     gestureResult = namespace + "." + command
 
             return gestureResult
+
+    def resolveCustomMappings(self, mappings, command: str):
+        for mapping in mappings:
+            if mapping["label"] == command:
+                return mapping["command"]
+            # Workaround for toggling players
+            elif mapping["label"] == ">" and command == "TOGGLEIFPLAYER":
+                return "TOGGLE"
 
     def handleRotation(self, event):
         for widget in self.sliderWidgets:
