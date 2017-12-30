@@ -70,7 +70,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                     # Push back command executed, full qualified command for action icon
                     gestureResult = namespace + "." + command
 
-            return gestureResult
+        return gestureResult
 
     def resolveCustomMappings(self, mappings, command: str):
         for mapping in mappings:
