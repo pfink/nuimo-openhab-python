@@ -71,15 +71,6 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
                 self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icon))
             else: logging.warning("Icon '"+config["command_icon_mapping"][fqCommand]+"' mapped to command '"+fqCommand+"' does not exist")
         else: logging.warning("No icon mapped to'"+fqCommand+"'")
-        #if event.gesture == ButtonEvents.BUTTON_CLICK:
-        #    "play"]))
-        #if event.gesture == nuimo.Gesture.TOUCH_BOTTOM:
-        #    self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["pause"]))
-        #if event.gesture == nuimo.Gesture.SWIPE_LEFT:
-        #    self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["previous"]))
-        #if event.gesture == nuimo.Gesture.SWIPE_RIGHT:
-        #    self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["next"]))
-
 
     def started_connecting(self):
         logging.info("Connecting...")
