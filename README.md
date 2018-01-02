@@ -138,6 +138,10 @@ the Slider elements.
 Swipe up+down: Navigate between apps (hierarchies / nexted `Text` elements are NOT supported by this keymap).
 A short button click sends a TOGGLE command to switches while the wheel will control the Slider elements.
 
+This short introduction video gives a hands-on overview on the usage:
+
+[![How to use the Nuimo openHAB integration](https://img.youtube.com/vi/QGt0zuFNhH0/3.jpg)](https://www.youtube.com/watch?v=QGt0zuFNhH0)
+
 ## Roadmap
 - [x] Extend configuration possibilities & usability
 - [ ] Add recommended way of installing and running this as a service
