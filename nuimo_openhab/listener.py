@@ -1,6 +1,7 @@
 import sys
 import logging
 import time
+import threading
 
 import nuimo
 import requests
@@ -21,8 +22,8 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
         self.reminder = 0.0
 
         # Caches the last dimmer item state, because the OpenHab REST API is too sluggish when the wheel is turned fast
-        self.lastDimmerItemState = 0
-        self.lastDimmerItemTimestamp = 0
+        self.lastSliderState = 0
+        self.lastSliderSentTimestamp = 0
 
     def addWidget(self, widget):
         if widget["type"] == "Slider":
@@ -81,36 +82,34 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                 return "TOGGLE"
 
     def handleRotation(self, event):
+        return self.handleSliders(event.value)
+
+    def handleSliders(self, rotationOffset):
+        valueChange = rotationOffset / 30
+        self.reminder += valueChange
+        currentTimestamp = int(round(time.time() * 1000))
         for widget in self.sliderWidgets:
-            valueChange = event.value / 30
-            self.reminder += valueChange
-            if (abs(self.reminder) >= 1):
-                self.openhab.req_post("/items/" + widget["item"]["name"], "REFRESH")
-                logging.debug(self.openhab.base_url + widget["item"]["name"] + "/state")
+            if abs(self.reminder) >= 1 and (widget["sendFrequency"] == 0 or self.lastSliderSentTimestamp < currentTimestamp-widget["sendFrequency"]):
                 try:
-                    currentTimestamp = int(round(time.time() * 1000))
-                    if (self.lastDimmerItemTimestamp < currentTimestamp-3000):
+                    if self.lastSliderSentTimestamp < currentTimestamp-3000:
+                        self.openhab.req_post("/items/" + widget["item"]["name"], "REFRESH")
+                        logging.debug(self.openhab.base_url + widget["item"]["name"] + "/state")
                         itemStateRaw = requests.get(self.openhab.base_url + "/items/" + widget["item"]["name"] + "/state").text
                         currentState = float(itemStateRaw)
-                        if (currentState < 0):
+                        if currentState <= 0:
                             currentState = 0
-                        if (currentState < 1):
+                        elif currentState < 1:
                             currentState *= 100
                         currentState = int(currentState)
                         logging.debug("Raw item state: "+itemStateRaw)
                     else:
-                        currentState = self.lastDimmerItemState
+                        currentState = self.lastSliderState
                     logging.debug("Old state: " + str(currentState))
-                    newState = currentState+round(self.reminder)
-                    if (newState < 0):
-                        newState = 0
-                    if (newState > 100):
-                        newState = 100
-
+                    newState = self.calculateNewSliderState(currentState, self.reminder)
                     logging.debug("New state: " + str(newState))
 
-                    self.lastDimmerItemState = newState
-                    self.lastDimmerItemTimestamp = currentTimestamp
+                    self.lastSliderState = newState
+                    self.lastSliderSentTimestamp = currentTimestamp
 
                     self.openhab.req_post("/items/" + widget["item"]["name"], str(newState))
                 except Exception:
@@ -118,4 +117,17 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                     logging.error(sys.exc_info())
                 finally:
                     self.reminder = 0
-        return self.lastDimmerItemState
+                    if widget["sendFrequency"] != 0:
+                        threading.Timer(widget["sendFrequency"]/1000, self.handleSliders, [0]).start()
+                    return self.lastSliderState
+
+        return self.calculateNewSliderState(self.lastSliderState, self.reminder)
+
+    def calculateNewSliderState(self, currentState, reminder = 0.0):
+        newState = currentState + round(reminder)
+        if (newState < 0):
+            newState = 0
+        if (newState > 100):
+            newState = 100
+
+        return newState

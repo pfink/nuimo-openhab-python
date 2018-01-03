@@ -146,7 +146,7 @@ This short introduction video gives a hands-on overview on the usage:
 ## Roadmap
 - [x] Extend configuration possibilities & usability
 - [ ] Add recommended way of installing and running this as a service
-- [ ] Add `sendFrequency` support for sliders
+- [x] Add `sendFrequency` support for sliders
 - [ ] Add support for `Setpoint`s
 - [ ] Add support for the FLY_UPDOWN gesture
 - [ ] Add more alternative key mapping examples and introduction video for the recommended key mapping
