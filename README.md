@@ -117,6 +117,7 @@ Switch MyCustomDimmer mappings=[INCREASE=FLY_LEFT, DECREASE=FLY_RIGHT]
 ```
 
 You can find a list of all available Nuimo gestures [here](https://github.com/getsenic/nuimo-linux-python/blob/0.3.6/nuimo/nuimo.py#L398).
+Additionally, `BUTTON_HOLD`, `BUTTON_CLICK`, `BUTTON_DOUBLE_CLICK` and `BUTTON_TRIPLE_CLICK` are available.
 
 ## Start the application
 
