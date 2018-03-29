@@ -15,6 +15,34 @@ An application based on [getsenic/nuimo-linux-python](https://github.com/getseni
     1. `pip3 install -r nuimo-openhab-python/requirements.txt`
     
 Optionally, you can move config.yml to another location (e.g. */etc/nuimo-openhab/config.yml*). If you do so, you have to specify that path via the environment variable `NUIMO_OPENHAB_CONFIG_PATH`.
+
+### Setup a systemd service
+
+To automatically run this app on system boot, you could optionally set it up in your init service. Most modern linux distributions use systemd as their init service (e.g. Debian/Raspbian since Jessie, Ubuntu since 15.04). To setup this app as a systemd service, you can put the following file to `/etc/systemd/system/nuimo-openhab.service`:
+
+```
+[Unit]
+Description=Nuimo openHAB Integration Service
+Requires=network-online.target bluetooth.service
+After=network-online.target bluetooth.service rsyslog.service
+
+[Service]
+ExecStart=/usr/bin/python3 /YOUR_PATH_TO_THIS_APP/main.py
+Type=simple
+SyslogIdentifier=nuimo-openhab
+
+[Install]
+WantedBy=multi-user.target
+````
+
+Afterwards, run
+
+```
+systemctl daemon-reload
+systemctl enable nuimo-openhab
+```
+
+to reload your configuration and activate auto-start on every boot.
     
 ### Upgrade an existing installation
 
@@ -122,9 +150,16 @@ Additionally, `BUTTON_HOLD`, `BUTTON_CLICK`, `BUTTON_DOUBLE_CLICK` and `BUTTON_T
 
 ## Start the application
 
+Plain (without systemd or another init service):
 ```
 cd nuimo-openhab-python
 python3 main.py
+```
+
+With systemd setup:
+
+```
+systemctl start nuimo-openhab
 ```
 
 ## Usage
@@ -146,7 +181,7 @@ This short introduction video gives a hands-on overview on the usage:
 
 ## Roadmap
 - [x] Extend configuration possibilities & usability
-- [ ] Add recommended way of installing and running this as a service
+- [x] Add recommended way of installing and running this as a service
 - [x] Add `sendFrequency` support for sliders
 - [ ] Add support for `Setpoint`s
 - [ ] Add support for the FLY_UPDOWN gesture
