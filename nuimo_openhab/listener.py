@@ -85,7 +85,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
         return self.handleSliders(event.value)
 
     def handleSliders(self, rotationOffset):
-        valueChange = rotationOffset / 30
+        valueChange = rotationOffset / (30 * config["rotation_sensitivity"])
         self.reminder += valueChange
         currentTimestamp = int(round(time.time() * 1000))
         for widget in self.sliderWidgets:

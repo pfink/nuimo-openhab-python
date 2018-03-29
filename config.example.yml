@@ -3,6 +3,7 @@ openhab_sitemap: "nuimo"
 nuimo_mac_address: "96:EC:C6:4D:05:BA"
 bluetooth_adapter: hci0
 rotation_icon: circle
+rotation_sensitivity: 1.0                         # Defines the number revolutions the wheel needs to reach 100%.
 
 log_file: "nuimo-openhab.log"
 log_level: INFO
