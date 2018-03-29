@@ -19,7 +19,7 @@ Optionally, you can move config.yml to another location (e.g. */etc/nuimo-openha
 ### Upgrade an existing installation
 
 1. Run `git pull --recurse-submodules`
-1. Re-Run `pip3 install -r nuimo-openhab-python/requirements.txt` to make sure you have all dependencies needed
+1. Run `pip3 install --upgrade -r nuimo-openhab-python/requirements.txt` to update all dependencies
 1. You may have to merge the newest version of `config.example.yml` to your `config.yml`
 1. Consider the release notes whether more actions are required
 
