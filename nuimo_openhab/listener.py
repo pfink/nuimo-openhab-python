@@ -34,6 +34,8 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
     def received_gesture_event(self, event):
         if event.gesture == nuimo.Gesture.ROTATION:
             return self.handleRotation(event)
+        elif event.gesture == nuimo.Gesture.BATTERY_LEVEL:
+            return self.handleBatteryLevel(event.value)
         else:
             return self.handleCommonGesture(event)
 
@@ -80,6 +82,16 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
             # Workaround for toggling players
             elif mapping["label"] == ">" and command == "TOGGLEIFPLAYER":
                 return "TOGGLE"
+
+    def handleBatteryLevel(self, battery_level):
+        try:
+            self.openhab.req_post("/items/" + config["openhab_batterylevel_item"], str(battery_level))
+            logging.debug("Updated battery level on item '%s' to %s", config["openhab_batterylevel_item"], str(battery_level))
+        except requests.HTTPError as error:
+            if error.response.status_code == 404:
+                logging.debug("Skipping battery level update. No item with name '%s' found.", config["openhab_batterylevel_item"])
+            else:
+                raise error
 
     def handleRotation(self, event):
         return self.handleSliders(event.value)

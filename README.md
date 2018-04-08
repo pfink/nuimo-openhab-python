@@ -148,6 +148,17 @@ Switch MyCustomDimmer mappings=[INCREASE=FLY_LEFT, DECREASE=FLY_RIGHT]
 You can find a list of all available Nuimo gestures [here](https://github.com/getsenic/nuimo-linux-python/blob/0.3.6/nuimo/nuimo.py#L398).
 Additionally, `BUTTON_HOLD`, `BUTTON_CLICK`, `BUTTON_DOUBLE_CLICK` and `BUTTON_TRIPLE_CLICK` are available.
 
+### Reading the Battery Level
+
+If you like to track the battery level of your Nuimo within openHAB, you can simply create the following item:
+
+```
+Number Nuimo_BatteryLevel "Nuimo Battery Level [%d]"
+```
+
+In case this item is present, this app will automatically update it with the current battery level accordingly.
+If you like to use a different name for this item, you can change it [within the config.yml](config.example.yml#L3).
+
 ## Start the application
 
 Plain (without systemd or another init service):
@@ -187,7 +198,8 @@ This short introduction video gives a hands-on overview on the usage:
 - [ ] Add support for the FLY_UPDOWN gesture
 - [ ] Add more alternative key mapping examples and introduction video for the recommended key mapping
 - [ ] Catch and treat HTTP errors from the REST API (e.g. 503)
-- [ ] Offer possibility to track the battery level within openHAB
+- [x] Offer possibility to track the battery level within openHAB
+- [ ] Allow sitemap configuration updates without restarting the app
 - [x] Logging
 - [x] Support icon sets
 - [x] Nuimo should be bound on a sitemap instead to the *Nuimo* group item. This will make the configuration more flexible and robust.
