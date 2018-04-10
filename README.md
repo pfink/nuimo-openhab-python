@@ -199,7 +199,7 @@ This short introduction video gives a hands-on overview on the usage:
 - [ ] Add more alternative key mapping examples and introduction video for the recommended key mapping
 - [ ] Catch and treat HTTP errors from the REST API (e.g. 503)
 - [x] Offer possibility to track the battery level within openHAB
-- [ ] Allow sitemap configuration updates without restarting the app
+- [x] Allow sitemap configuration updates without restarting the app
 - [x] Logging
 - [x] Support icon sets
 - [x] Nuimo should be bound on a sitemap instead to the *Nuimo* group item. This will make the configuration more flexible and robust.

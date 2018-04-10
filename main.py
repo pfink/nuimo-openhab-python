@@ -11,8 +11,8 @@ class Main:
 
     def run(self):
         try:
-            openhab = openHAB(config["openhab_api_url"])
-            apps = OpenHabAppBuilder(openhab, config["openhab_sitemap"]).buildApps()
+            self.openhab = openHAB(config["openhab_api_url"])
+            self.app_builder = OpenHabAppBuilder(self.openhab, config["openhab_sitemap"])
 
             manager = nuimo.ControllerManager(adapter_name=config["bluetooth_adapter"])
             manager.is_adapter_powered = True
@@ -25,11 +25,10 @@ class Main:
                     logging.info("Discovered Nuimo controller: %s", controller.mac_address)
                     if (controller.mac_address == str(config["nuimo_mac_address"]).lower()):
                         logging.info("Found configured Nuimo with MAC address " + config["nuimo_mac_address"])
-                        # Initialize App
-                        menue = NuimoMenue(apps=apps, controller=controller)
-                        controller.listener = NuimoMenueControllerListener(menue)
-                        controller.connect()
-                        menue.showIcon()
+                        self.main.app_builder.fetch_sitemap()
+                        self.main.initialize_controller()
+                        if(config["openhab_autoupdate_sitemap"]):
+                            self.main.initialize_updatethead()
                     else:
                         logging.info("Discovered Nuimo " + controller.mac_address + " does not match with configured " + config[
                             "nuimo_mac_address"] + ". Continue discovery...")
@@ -43,6 +42,23 @@ class Main:
         except Exception:
             logging.error(traceback.format_exc())
 
+    def apply_sitemap_changes(self):
+        sitemapHasChanged = self.app_builder.fetch_sitemap()
+        if sitemapHasChanged:
+            self.initialize_controller()
+        self.initialize_updatethead()
+
+    def initialize_controller(self):
+        apps = self.app_builder.build_apps()
+        menue = NuimoMenue(apps=apps, controller=self.controller)
+        self.controller.listener = NuimoMenueControllerListener(menue)
+        if not self.controller.is_connected():
+            self.controller.connect()
+        menue.showIcon()
+        logging.info("Controller and Listener (re-)initialized!")
+
+    def initialize_updatethead(self):
+        threading.Timer(config["openhab_autoupdate_sitemap"], self.apply_sitemap_changes).start()
 
     def __init__(self):
         try:
@@ -52,9 +68,9 @@ class Main:
 
             # We have run everything within a subthread because bitchy Python does not want to handle signals as everyone would expect
             # See also: https://bugs.python.org/issue5315
-            self.thread = threading.Thread(target = self.run)
-            self.thread.start()
-            self.thread.join()
+            thread = threading.Thread(target = self.run)
+            thread.start()
+            thread.join()
             self.exit_gracefully(1)
         except KeyboardInterrupt:            
             self.exit_gracefully()
