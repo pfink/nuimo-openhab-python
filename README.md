@@ -198,6 +198,7 @@ This short introduction video gives a hands-on overview on the usage:
 - [ ] Add support for the FLY_UPDOWN gesture
 - [ ] Add more alternative key mapping examples and introduction video for the recommended key mapping
 - [ ] Catch and treat HTTP errors from the REST API (e.g. 503)
+- [ ] Show LED numbers between 0 and 100 for `Sliders`
 - [x] Offer possibility to track the battery level within openHAB
 - [x] Allow sitemap configuration updates without restarting the app
 - [x] Logging
