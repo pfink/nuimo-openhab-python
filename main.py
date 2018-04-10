@@ -66,7 +66,7 @@ class Main:
             for sig in [signal.SIGHUP, signal.SIGINT, signal.SIGTERM, signal.SIGABRT, signal.SIGQUIT]:
                 signal.signal(sig, self.signal_handler)
 
-            # We have run everything within a subthread because bitchy Python does not want to handle signals as everyone would expect
+            # We have to run everything within a subthread because bitchy Python does not want to handle signals as everyone would expect
             # See also: https://bugs.python.org/issue5315
             thread = threading.Thread(target = self.run)
             thread.start()
