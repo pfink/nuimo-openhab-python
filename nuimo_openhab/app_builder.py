@@ -85,6 +85,10 @@ class OpenHabAppBuilder:
         elif isinstance(sitemap1, dict) and isinstance(sitemap2, dict):
             for key, value in sitemap1.items():
                 if key not in sitemap2 or key != "state" and (key != "label" or self.is_icon_label(value)) and not self.compare_sitemap_config(value, sitemap2[key]):
+                    logging.debug("Sitemap configuration does not match. Value of key %s differs or key is not available in other sitemap", key)
                     return False
-        else:
-            return sitemap1 == sitemap2
+        elif not sitemap1 == sitemap2:
+            logging.debug("Sitemap configuration is do not match. Value '%s' is differs from '%s", sitemap1, sitemap2)
+            return False
+
+        return True
