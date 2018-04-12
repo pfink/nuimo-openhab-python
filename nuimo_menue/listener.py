@@ -107,6 +107,12 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             self.wheelReminder = 0
 
     def showRotationState(self, percent):
+        if "digit" in config["rotation_icon"]:
+            self.showRotationStateDigits(percent)
+        else:
+            self.showRotationStateIcon(percent)
+
+    def showRotationStateIcon(self, percent):
 
         fullRotationString = icons[config.rotation_icon]
         fullRotationIsCircular = True
@@ -142,3 +148,35 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
 
             matrix = nuimo.LedMatrix("".join(currentRotationString))
             self.nuimoMenue.controller.display_matrix(matrix=matrix,fading=True, ignore_duplicates=True)
+
+
+    def showRotationStateDigits(self, percent):
+        if percent == 100:
+            numberLed = icons[config["rotation_icon"] + "-100"]
+        else:
+            digit1 = percent // 10
+            digit2 = percent % 10
+
+            if not config["rotation_icon_leading_zero"] and digit1 == 0:
+                digit1Led = icons["2-digit-empty"]
+            else:
+                digit1Led = icons[config["rotation_icon"] + "-" + str(digit1)]
+
+            digit2Led = icons[config["rotation_icon"] + "-" + str(digit2)]
+
+            numberLed = self.mergeLedHalfDigits(digit1Led, digit2Led)
+
+        matrix = nuimo.LedMatrix("".join(numberLed))
+        self.nuimoMenue.controller.display_matrix(matrix=matrix, fading=True, ignore_duplicates=True)
+
+
+    def mergeLedHalfDigits(self, digit1, digit2):
+        i = int()
+        ledNumber = str()
+
+        for i in range (0, 9):
+            start = 4*i
+            end = start+4
+            ledNumber += digit1[start:end] + " " + digit2[start:end]
+
+        return ledNumber

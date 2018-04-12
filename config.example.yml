@@ -1,10 +1,11 @@
 openhab_api_url: "http://localhost:8080/rest"
 openhab_sitemap: "nuimo"
-openhab_batterylevel_item: "Nuimo_BatteryLevel"
+openhab_batterylevel_item: "Nuimo_BatteryLevel"   # Name of the Number item that is updated with the battery level of the Nuimo
 openhab_autoupdate_sitemap: 60                    # Interval at that openHAB is being polled for sitemap configuration changes in seconds
 nuimo_mac_address: "96:EC:C6:4D:05:BA"
 bluetooth_adapter: hci0
-rotation_icon: circle
+rotation_icon: 2-digit-angular                    # Accepted values: 2-digit-angular, 2-digit-curved, circle
+rotation_leading_zero: false                      # Only valid for digit rotation icons: Defines whether there is a leading zero for 1-digit numbers.
 rotation_sensitivity: 1.0                         # Defines the number revolutions the wheel needs to reach 100%.
 
 log_file: "nuimo-openhab.log"
