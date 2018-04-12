@@ -32,6 +32,9 @@ key_mapping:
       SWIPE_RIGHT:
         - "OPENHAB.CustomSwitch.>>"               # Workaround making default Player elements work without extra config
       ROTATION: "OPENHAB.Slider.WHEELDIMMER"
+      TOUCH_BOTTOM: "MENUE.SHOWAPP"
+      TOUCH_LEFT: "MENUE.SHOWAPP"
+      TOUCH_RIGHT: "MENUE.SHOWAPP"
     # More modes can be added here
     menue:
       SWIPE_UP: "MENUE.PARENT"
