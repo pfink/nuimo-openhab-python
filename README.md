@@ -46,7 +46,7 @@ to reload your configuration and activate auto-start on every boot.
     
 ### Upgrade an existing installation
 
-1. Run `git pull --recurse-submodules`
+1. Run `git pull --recurse-submodules && git submodule update --recursive --remote` to upgrade to the latest version of this app
 1. Run `pip3 install --upgrade -r nuimo-openhab-python/requirements.txt` to update all dependencies
 1. You may have to merge the newest version of `config.example.yml` to your `config.yml`
 1. Consider the release notes whether more actions are required
