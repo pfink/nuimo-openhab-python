@@ -107,6 +107,8 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                         self.openhab.req_post("/items/" + widget["item"]["name"], "REFRESH")
                         logging.debug(self.openhab.base_url + widget["item"]["name"] + "/state")
                         itemStateRaw = requests.get(self.openhab.base_url + "/items/" + widget["item"]["name"] + "/state").text
+                        if(itemStateRaw == "NULL"):
+                            itemStateRaw = config["openhab_slider_null_command"]
                         currentState = float(itemStateRaw)
                         if currentState <= 0:
                             currentState = 0
