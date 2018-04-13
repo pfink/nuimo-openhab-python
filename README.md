@@ -157,7 +157,7 @@ Number Nuimo_BatteryLevel "Nuimo Battery Level [%d]"
 ```
 
 In case this item is present, this app will automatically update it with the current battery level accordingly.
-If you like to use a different name for this item, you can change it [within the config.yml](config.example.yml#L3).
+If you like to use a different name for this item, you can change it [within the config.yml](config.example.yml#L6).
 
 ## Start the application
 
