@@ -6,7 +6,7 @@ openhab_slider_null_command: 0                    # Command that should be sent 
 nuimo_mac_address: "96:EC:C6:4D:05:BA"
 bluetooth_adapter: hci0
 rotation_icon: 2-digit-angular                    # Accepted values: 2-digit-angular, 2-digit-curved, circle
-rotation_leading_zero: false                      # Only valid for digit rotation icons: Defines whether there is a leading zero for 1-digit numbers.
+rotation_icon_leading_zero: false                      # Only valid for digit rotation icons: Defines whether there is a leading zero for 1-digit numbers.
 rotation_sensitivity: 1.0                         # Defines the number revolutions the wheel needs to reach 100%.
 
 log_file: "nuimo-openhab.log"
