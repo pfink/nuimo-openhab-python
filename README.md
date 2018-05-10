@@ -8,11 +8,11 @@ An application based on [getsenic/nuimo-linux-python](https://github.com/getseni
 ## Installation (Linux only)
 
 1. Make sure bluez version 5.43 or higher  is installed. Normally, you can check your bluez version by executing this command: `bluetoothd --version`.
-1. `git clone --recurse-submodules https://github.com/pfink/nuimo-openhab-python -b latest-release`
-1. Adjust *config.example.yml* to your needs and rename it to *config.yml*
-1. Install dependencies (the following commands are examples for a Debian-based system):
+1. Download the latest release to your machine: `git clone --recurse-submodules https://github.com/pfink/nuimo-openhab-python -b latest-release`
+1. Create a copy of *config.example.yml* with the name *config.yml*: `cd nuimo-openhab-python && cp config.example.yml config.yml`
+1. Install dependencies (the following commands are examples for a Debian-based system, they may differ on other Linux distributions):
     1. `apt-get install python3-pip python3-dbus python3-gi python3-yaml`
-    1. `pip3 install -r nuimo-openhab-python/requirements.txt`
+    1. `pip3 install -r requirements.txt`
     
 Optionally, you can move config.yml to another location (e.g. */etc/nuimo-openhab/config.yml*). If you do so, you have to specify that path via the environment variable `NUIMO_OPENHAB_CONFIG_PATH`.
 
@@ -51,9 +51,18 @@ to reload your configuration and activate auto-start on every boot.
 1. You may have to merge the newest version of `config.example.yml` to your `config.yml`
 1. Consider the release notes whether more actions are required
 
-## Keymap Configuration
+## Application / Nuimo Configuration
 
-TBD
+The configuration of this application is done via **[config.yml](../../config.example.yml).**  To get started, usually just the following parameters have to be checked and adjusted:
+
+- `openhab_api_url`
+- `nuimo_mac_address`
+- `bluetooth_adapter`
+
+All other parameters have adequate default values which do not have to be changed for getting started.
+Anyway, you have extensive possibilities to change the applications behavior.
+Normally, the descriptions and examples within  **[config.example.yml](../../config.example.yml)** are a sufficient documentation
+of the available options. Exception: For the option `key_mapping` which is more complex, you can find a comprehensive documentation [here](examples/keymaps).
 
 ## openHAB Configuration
 
@@ -196,7 +205,7 @@ This short introduction video gives a hands-on overview on the usage:
 - [x] Add `sendFrequency` support for sliders
 - [ ] Add support for `Setpoint`s
 - [ ] Add support for the FLY_UPDOWN gesture
-- [ ] Add more alternative key mapping examples and introduction video for the recommended key mapping
+- [x] Add key mapping documentation and introduction video for the recommended key mapping
 - [ ] Catch and treat HTTP errors from the REST API (e.g. 503)
 - [x] Show LED numbers between 0 and 100 for `Sliders`
 - [x] Offer possibility to track the battery level within openHAB
