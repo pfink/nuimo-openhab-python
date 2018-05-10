@@ -199,19 +199,3 @@ A short button click sends a TOGGLE command to switches while the wheel will con
 This short introduction video gives a hands-on overview on the usage:
 
 [![How to use the Nuimo openHAB integration](https://img.youtube.com/vi/QGt0zuFNhH0/3.jpg)](https://www.youtube.com/watch?v=QGt0zuFNhH0)
-
-## Roadmap
-- [x] Extend configuration possibilities & usability
-- [x] Add recommended way of installing and running this as a service
-- [x] Add `sendFrequency` support for sliders
-- [ ] Add support for `Setpoint`s
-- [ ] Add support for the FLY_UPDOWN gesture
-- [x] Add key mapping documentation and introduction video for the recommended key mapping
-- [ ] Catch and treat HTTP errors from the REST API (e.g. 503)
-- [x] Show LED numbers between 0 and 100 for `Sliders`
-- [x] Offer possibility to track the battery level within openHAB
-- [x] Allow sitemap configuration updates without restarting the app
-- [x] Logging
-- [x] Support icon sets
-- [x] Nuimo should be bound on a sitemap instead to the *Nuimo* group item. This will make the configuration more flexible and robust.
-- [x] It should be possible to "jump into" a group so that you can navigate with the Nuimo similar to other UIs
