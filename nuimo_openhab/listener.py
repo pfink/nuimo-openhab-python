@@ -126,14 +126,11 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                     self.lastSliderSentTimestamp = currentTimestamp
 
                     self.openhab.req_post("/items/" + widget["item"]["name"], str(newState))
-                except Exception:
-                    newState = 0
-                    logging.error(sys.exc_info())
                 finally:
                     self.reminder = 0
                     if widget["sendFrequency"] != 0:
                         threading.Timer(widget["sendFrequency"]/1000, self.handleSliders, [0]).start()
-                    return self.lastSliderState
+                return self.lastSliderState
 
         return self.calculateNewSliderState(self.lastSliderState, self.reminder)
 

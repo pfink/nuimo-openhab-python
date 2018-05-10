@@ -10,6 +10,7 @@ openhab_slider_null_command: 0                    # Command that should be sent 
 rotation_icon: 2-digit-angular                    # Accepted values: 2-digit-angular, 2-digit-curved, circle
 rotation_icon_leading_zero: false                 # Only valid for digit rotation icons: Defines whether there is a leading zero for 1-digit numbers.
 rotation_sensitivity: 1.0                         # Defines the number revolutions the wheel needs to reach 100%.
+error_icon: "errorExclamationMark"                # The icon shown on the Nuimo if an error occurs during event handling. Recommended values: errorExclamationMark, errorX, errorSmiley
 
 log_file: "nuimo-openhab.log"
 log_level: INFO
