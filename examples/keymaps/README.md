@@ -78,7 +78,7 @@ Default/Initial mode:
 
 Navigation mode:
 - Swipe up+down: Go up or down the hierarchy.
-- Wheel / Swipe left+right: Navigate between apps on the same hierarchy. When the button is not hold, by default a short button click sends a TOGGLE command to switches while the wheel will control the Slider elements.
+- Wheel / Swipe left+right: Navigate between apps on the same hierarchy.
 
 The navigation mode is active **as long as the Nuimo's main button is pressed**. It's entered on a `BUTTON_PRESS` event and the mode is switched back to default after a `BUTTON_RELEASE` event.
 
