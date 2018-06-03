@@ -55,8 +55,11 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             elif mappedCommand == "SHOWAPP":
                 logging.debug("Name: "+self.nuimoMenue.getCurrentApp().getName())
                 self.nuimoMenue.showIcon()
-            elif mappedCommand == "WHEELNAVIGATION":
-                self.wheelNavigation(event)
+            elif mappedCommand == "SHOWBATTERYLEVEL":
+                self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["battery"]))
+                time.sleep(1)
+                self.showPercentageIcon(self.nuimoMenue.controller.battery_level)
+            elif mappedCommand == "WHEELNAVIGATION":                self.wheelNavigation(event)
 
             if mappedCommand != "WHEELNAVIGATION":
                 self.wheelReminder = 0
@@ -64,7 +67,7 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             gestureResult = self.nuimoMenue.getCurrentApp().getListener().received_gesture_event(event)
             if gestureResult is not None:
                 if event.gesture == nuimo.Gesture.ROTATION:
-                    self.showRotationState(percent=gestureResult)
+                    self.showPercentageIcon(percent=gestureResult)
                 else:
                     self.show_command_icon(fqCommand=gestureResult)
 
@@ -113,7 +116,7 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
                 self.nuimoMenue.navigateToNextApp()
             self.wheelReminder = 0
 
-    def showRotationState(self, percent):
+    def showPercentageIcon(self, percent):
         if "digit" in config["rotation_icon"]:
             self.showRotationStateDigits(percent)
         else:

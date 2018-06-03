@@ -16,6 +16,11 @@ Changes the mode currently active to the specified `mode_name`.
 
 Shows the icon of the app currently active via LED matrix
 
+### SHOWBATTERYLEVEL
+
+Shows the battery level of the Nuimo on the LED matrix (the icon schema configured by the `rotation_icon` parameter
+within config.yml is used).
+
 ### PREVIOUS
 
 Changes the currently active app to the previous app and shows the icon of the previous app via LED matrix.

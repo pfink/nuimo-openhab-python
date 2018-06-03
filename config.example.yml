@@ -30,8 +30,8 @@ key_mapping:
       BUTTON_CLICK:
         - "OPENHAB.Switch.TOGGLE"
         - "OPENHAB.CustomSwitch.TOGGLEIFPLAYER"   # Workaround making default Player elements work without extra config. Toggles PLAY/PAUSE if it's a player element.
-      SWIPE_UP: "MENUE.PARENT"
-      SWIPE_DOWN: "MENUE.CHILD"
+      #SWIPE_UP: "MENUE.PARENT"
+      SWIPE_DOWN: "MENUE.SHOWBATTERYLEVEL"
       SWIPE_LEFT:
         - "OPENHAB.CustomSwitch.<<"               # Workaround making default Player elements work without extra config
       SWIPE_RIGHT:
