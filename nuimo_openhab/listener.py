@@ -2,6 +2,7 @@ import sys
 import logging
 import time
 import threading
+from nuimo_openhab.util.threading import synchronized
 
 import nuimo
 import requests
@@ -24,15 +25,19 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
         # Caches the last dimmer item state, because the OpenHab REST API is too sluggish when the wheel is turned fast
         self.lastSliderState = 0
         self.lastSliderSentTimestamp = 0
+        self.lastSliderEventTimestamp = 0
+        self.maxNewRotationActionWait = 3000
 
     def addWidget(self, widget):
         if widget["type"] == "Slider":
             self.sliderWidgets.append(widget)
+            for widget in self.sliderWidgets:
+                self.maxNewRotationActionWait = max(widget["sendFrequency"], self.maxNewRotationActionWait)
         else:
             self.widgets.append(widget)
 
     def received_gesture_event(self, event):
-        if event.gesture == nuimo.Gesture.ROTATION:
+        if event.gesture == nuimo.Gesture.ROTATION and len(self.sliderWidgets) != 0:
             return self.handleRotation(event)
         elif event.gesture == nuimo.Gesture.BATTERY_LEVEL:
             return self.handleBatteryLevel(event.value)
@@ -96,49 +101,55 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
     def handleRotation(self, event):
         return self.handleSliders(event.value)
 
+    @synchronized
     def handleSliders(self, rotationOffset):
         valueChange = rotationOffset / (30 * config["rotation_sensitivity"])
-        self.reminder += valueChange
         currentTimestamp = int(round(time.time() * 1000))
+        isNewRotationAction = self.lastSliderEventTimestamp < currentTimestamp - self.maxNewRotationActionWait
+        self.lastSliderEventTimestamp = currentTimestamp
+        if isNewRotationAction:
+            self.reminder = 0
+        self.reminder += valueChange
+
         for widget in self.sliderWidgets:
-            if abs(self.reminder) >= 1 and (widget["sendFrequency"] == 0 or self.lastSliderSentTimestamp < currentTimestamp-widget["sendFrequency"]):
-                try:
-                    if self.lastSliderSentTimestamp < currentTimestamp-3000:
-                        self.openhab.req_post("/items/" + widget["item"]["name"], "REFRESH")
-                        logging.debug(self.openhab.base_url + widget["item"]["name"] + "/state")
-                        itemStateRaw = requests.get(self.openhab.base_url + "/items/" + widget["item"]["name"] + "/state").text
-                        if(itemStateRaw == "NULL"):
-                            itemStateRaw = config["openhab_slider_null_command"]
-                        currentState = float(itemStateRaw)
-                        if currentState <= 0:
-                            currentState = 0
-                        elif currentState < 1:
-                            currentState *= 100
-                        currentState = int(currentState)
-                        logging.debug("Raw item state: "+itemStateRaw)
-                    else:
-                        currentState = self.lastSliderState
-                    logging.debug("Old state: " + str(currentState))
-                    newState = self.calculateNewSliderState(currentState, self.reminder)
-                    logging.debug("New state: " + str(newState))
+            if isNewRotationAction:
+                # Take care that the slider status shown on the LED matrix
+                # and used for calculating the new slider state is not older than 3s
+                self.openhab.req_post("/items/" + widget["item"]["name"], "REFRESH")
+                logging.debug(self.openhab.base_url + widget["item"]["name"] + "/state")
+                itemStateRaw = requests.get(self.openhab.base_url + "/items/" + widget["item"]["name"] + "/state").text
+                if(itemStateRaw == "NULL"):
+                    itemStateRaw = config["openhab_slider_null_command"]
+                currentState = float(itemStateRaw)
+                if currentState <= 0:
+                    currentState = 0
+                elif currentState < 1:
+                    currentState *= 100
+                self.lastSliderState = int(currentState)
+                logging.debug("Raw item state: "+itemStateRaw)
 
-                    self.lastSliderState = newState
-                    self.lastSliderSentTimestamp = currentTimestamp
+            if abs(self.reminder) >= 1:
+                logging.debug("Old state: " + str(self.lastSliderState))
 
-                    self.openhab.req_post("/items/" + widget["item"]["name"], str(newState))
-                finally:
+                roundedReminder = int(self.reminder)
+                self.reminder -= roundedReminder
+                self.lastSliderState += roundedReminder
+                if self.lastSliderState <= 0:
+                    self.lastSliderState = 0
                     self.reminder = 0
+                elif self.lastSliderState >= 100:
+                    self.lastSliderState = 100
+                    self.reminder = 0
+
+                logging.debug("New state: " + str(self.lastSliderState))
+
+                if self.lastSliderSentTimestamp <= currentTimestamp - widget["sendFrequency"]:
+                    # Send command
+                    logging.debug("Sending command...")
+                    self.openhab.req_post("/items/" + widget["item"]["name"], str(self.lastSliderState))
+
+                    self.lastSliderSentTimestamp = currentTimestamp
                     if widget["sendFrequency"] != 0:
                         threading.Timer(widget["sendFrequency"]/1000, self.handleSliders, [0]).start()
-                return self.lastSliderState
 
-        return self.calculateNewSliderState(self.lastSliderState, self.reminder)
-
-    def calculateNewSliderState(self, currentState, reminder = 0.0):
-        newState = currentState + round(reminder)
-        if (newState < 0):
-            newState = 0
-        if (newState > 100):
-            newState = 100
-
-        return newState
+        return self.lastSliderState
