@@ -69,7 +69,9 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                 if command == "TOGGLE":
                     state = requests.get(self.openhab.base_url + "/items/" + widget["item"]["name"] + "/state").text
                     if state in config["toggle_mapping"]:
-                        command = config["toggle_mapping"][state]
+                        command = str(config["toggle_mapping"][state])
+                    elif state == "NULL" and widget["item"]["type"] in config["initial_command"]:
+                        command = str(config["initial_command"][widget["item"]["type"]])
                     else:
                         logging.warning("There is no toggle counterpart known for state '"+state+"'. Skip TOGGLE command.")
 
@@ -119,7 +121,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                 logging.debug(self.openhab.base_url + widget["item"]["name"] + "/state")
                 itemStateRaw = requests.get(self.openhab.base_url + "/items/" + widget["item"]["name"] + "/state").text
                 if(itemStateRaw == "NULL"):
-                    itemStateRaw = config["openhab_slider_null_command"]
+                    itemStateRaw = config["initial_command"]["Dimmer"]
                 currentState = float(itemStateRaw)
                 if currentState <= 0:
                     currentState = 0

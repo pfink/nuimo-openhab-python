@@ -74,3 +74,10 @@ toggle_mapping:
     CLOSE: OPEN
     "100": "0"
     "0": "100"
+
+# Defines which command is executed if the state is NULL when toggling or sliding
+initial_command:
+    Dimmer: 100
+    Switch: ON
+    Player: PLAY
+    Rollershutter: DOWN
