@@ -60,7 +60,7 @@ The configuration of this application is done via **[config.yml](../../config.ex
 - `nuimo_mac_address`
 - `bluetooth_adapter`
 
-All other parameters have adequate default values which do not have to be changed for getting started.
+All other parameters have adequate default values which do not have to be changed to get started.
 Anyway, you have extensive possibilities to change the applications behavior.
 Normally, the descriptions and examples within  **[config.example.yml](../../config.example.yml)** are a sufficient documentation
 of the available options. Exception: For the option `key_mapping` which is more complex, you can find a comprehensive documentation [here](examples/keymaps).
