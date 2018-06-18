@@ -77,7 +77,7 @@ toggle_mapping:
 
 # Defines which command is executed if the state is NULL when toggling or sliding
 initial_command:
-    Dimmer: 100
+    Dimmer: 0
     Switch: ON
     Player: PLAY
     Rollershutter: DOWN
