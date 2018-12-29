@@ -25,7 +25,7 @@ To automatically run this app on system boot, you could optionally set it up in 
 [Unit]
 Description=Nuimo openHAB Integration Service
 Requires=network-online.target bluetooth.service
-After=network-online.target bluetooth.service rsyslog.service
+After=network-online.target bluetooth.service rsyslog.service openhab2.service
 
 [Service]
 ExecStart=/usr/bin/python3 /YOUR_PATH_TO_THIS_APP/main.py
