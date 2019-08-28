@@ -59,7 +59,8 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
                 self.nuimoMenue.controller.display_matrix(nuimo.LedMatrix(icons["battery"]))
                 time.sleep(1)
                 self.showPercentageIcon(self.nuimoMenue.controller.battery_level)
-            elif mappedCommand == "WHEELNAVIGATION":                self.wheelNavigation(event)
+            elif mappedCommand == "WHEELNAVIGATION":
+                self.wheelNavigation(event)
 
             if mappedCommand != "WHEELNAVIGATION":
                 self.wheelReminder = 0
