@@ -98,6 +98,7 @@ Before you start the App, you have to configure the openHAB-side to define which
        string of the length of 81 chars (9x9) and consist of asterisks(`*`) for led=on and spaces (` `) for led=off.
        In case you create custom icons, it would be great if you contribute them so that the number of predefined icons
        grows! Just leave a comment with your icon [here](https://gist.github.com/pfink/7a468eb906644dc570cc28acb7c4d2b7#comments).
+1. Before using your sitemap with the Nuimo, always test if it's properly working with openHAB's [Basic UI](https://www.openhab.org/docs/configuration/ui/basic/). This will speed up the troubleshooting process and prevent you to look for error causes on the wrong side.
 
 ### Example Sitemap Configuration
 
