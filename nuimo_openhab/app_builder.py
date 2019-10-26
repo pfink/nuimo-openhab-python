@@ -13,6 +13,8 @@ class OpenHabAppBuilder:
     def fetch_sitemap(self):
         sitemap = self.openhab.req_get("/sitemaps/" + self.sitemapName)
         hasChanged = not self.compare_sitemap_config(sitemap, self.sitemap)
+        if hasChanged:  logging.info("New/changed sitemap fetched: %s", sitemap)            
+        else:           logging.debug("Fetched sitemap: %s", sitemap)
         self.sitemap = sitemap
         return hasChanged
 

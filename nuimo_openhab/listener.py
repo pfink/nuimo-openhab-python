@@ -48,6 +48,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
         gestureResult = None
 
         for widget in self.widgets:
+            logging.debug("Handle gesture '%s' for widget: %s", event.gesture, widget)            
             namespace = "OPENHAB." + widget["type"]
             mappedCommands = config.get_mapped_commands(gesture=event.gesture, namespace=namespace)
             # Add additional commands defined via custom mapping
@@ -55,7 +56,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
             if customCommand is not None:
                 mappedCommands.append(customCommand)
 
-            logging.debug("Mapped command openHAB: " + str(mappedCommands) + "(requested namespace: " + namespace + ")")
+            logging.debug("Mapped command openHAB: %s (requested namespace: %s)", mappedCommands, namespace)
 
             for command in mappedCommands:
                 # Special handling for mappings:

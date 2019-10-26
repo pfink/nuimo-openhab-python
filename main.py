@@ -24,14 +24,14 @@ class Main:
                     self.main.controller = controller
                     logging.info("Discovered Nuimo controller: %s", controller.mac_address)
                     if (controller.mac_address == str(config["nuimo_mac_address"]).lower()):
-                        logging.info("Found configured Nuimo with MAC address " + config["nuimo_mac_address"])
+                        logging.info("Found configured Nuimo with MAC address %s", config["nuimo_mac_address"])
                         self.main.app_builder.fetch_sitemap()
                         self.main.initialize_controller()
                         if(config["openhab_autoupdate_sitemap"]):
-                            self.main.initialize_updatethead()
+                            self.main.initialize_updatethread()
                     else:
-                        logging.info("Discovered Nuimo " + controller.mac_address + " does not match with configured " + config[
-                            "nuimo_mac_address"] + ". Continue discovery...")
+                        logging.info("Discovered Nuimo %s does not match with configured %s. Continue discovery...", controller.mac_address, config[
+                            "nuimo_mac_address"])
 
             manager.listener = ControllerManagerDiscoveryListener(self)
 
@@ -46,7 +46,7 @@ class Main:
         sitemapHasChanged = self.app_builder.fetch_sitemap()
         if sitemapHasChanged:
             self.initialize_controller()
-        self.initialize_updatethead()
+        self.initialize_updatethread()
 
     def initialize_controller(self):
         apps = self.app_builder.build_apps()
@@ -57,7 +57,7 @@ class Main:
         menue.showIcon()
         logging.info("Controller and Listener (re-)initialized!")
 
-    def initialize_updatethead(self):
+    def initialize_updatethread(self):
         threading.Timer(config["openhab_autoupdate_sitemap"], self.apply_sitemap_changes).start()
 
     def __init__(self):

@@ -28,5 +28,5 @@ with open(NUIMO_OPENHAB_CONFIG_PATH, 'r') as ymlfile:
     for logger in loggers: logger.setFormatter(formatter)
     if loggers: logging.basicConfig(handlers=loggers, level=rawConfig["log_level"])
 
-    logging.info("Loaded config file from "+ NUIMO_OPENHAB_CONFIG_PATH)
+    logging.info("Loaded config file from %s", NUIMO_OPENHAB_CONFIG_PATH)
     sys.modules[__name__] = NuimoOpenHabConfiguration(rawConfig)
