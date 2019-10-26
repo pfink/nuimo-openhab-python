@@ -64,20 +64,20 @@ command_icon_mapping:
 
 # Defines which command is executed on a TOGGLE action
 toggle_mapping:
+    "ON": "OFF"
+    "OFF": "ON"
+    "100": "0"
+    "0": "100"
     PLAY: PAUSE
     PAUSE: PLAY
-    ON: OFF
-    OFF: ON
     UP: DOWN
     DOWN: UP
     OPEN: CLOSE
     CLOSE: OPEN
-    "100": "0"
-    "0": "100"
 
 # Defines which command is executed if the state is NULL when toggling or sliding
 initial_command:
-    Dimmer: 0
-    Switch: ON
+    Dimmer: "0"
+    Switch: "ON"
     Player: PLAY
     Rollershutter: DOWN
