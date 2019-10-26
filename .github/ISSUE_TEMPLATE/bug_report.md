@@ -23,6 +23,9 @@ A clear and concise description of what you expected to happen.
 **Sitemap and configuration**
 Please add the sitemap and configuration you used.
 
+**Log Files**
+Please add excerpts of your log files (nuimo-openhab.log and openhab.log) here. Before you capture the nuimo-openhab.log, make sure that the option "log_level" within your config.yml is set to DEBUG.
+
 **System information(please complete the following information):**
 - Device: [e.g. iOS] 
 - Operating System: [e.g. iOS]
