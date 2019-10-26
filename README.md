@@ -103,7 +103,7 @@ Before you start the App, you have to configure the openHAB-side to define which
 ### Example Sitemap Configuration
 
 ```
-sitemap nuimo
+sitemap nuimo label="Nuimo"
 {
     Text label="Multiroom Audio System" icon="music" {
         Switch item=AllRooms_Player mappings=[TOGGLE=BUTTON_CLICK]
