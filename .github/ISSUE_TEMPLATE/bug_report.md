@@ -27,9 +27,11 @@ Please add the sitemap and configuration you used.
 Please add excerpts of your log files (nuimo-openhab.log and openhab.log) here. Before you capture the nuimo-openhab.log, make sure that the option "log_level" within your config.yml is set to DEBUG.
 
 **System information(please complete the following information):**
-- Device: [e.g. iOS] 
-- Operating System: [e.g. iOS]
-- Version [e.g. 22]
+- Device: [e.g. Raspberry Pi 3] 
+- Operating System: [e.g. Raspian Stretch] (can be captured by running "lsb_release -a")
+- Python Version: [e.g. 3.5.3] (can be captured by running "python3 --version")
+- openHAB Version: [e.g. 2.5.0] (can be captured by running "openhab-cli info")
+- Nuimo openHAB Python Version: [e.g. 1.0] (can be captured by running "git describe --tags" within the applications path)
 
 **Additional context**
 Add any other context about the problem here.
