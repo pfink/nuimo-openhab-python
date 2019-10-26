@@ -52,6 +52,10 @@ to reload your configuration and activate auto-start on every boot.
 1. You may have to merge the newest version of `config.example.yml` to your `config.yml`
 1. Consider the release notes whether more actions are required
 
+### Test the latest development version
+
+If you'd like to test the latest (not yet released) development version, run `git checkout master` and then follow the [Upgrade an existing installation](#upgrade-an-existing-installation) guide. To get back to the stable track, just run `git checkout latest-release`.
+
 ## Application / Nuimo Configuration
 
 The configuration of this application is done via **[config.yml](config.example.yml).**  To get started, usually just the following parameters have to be checked and adjusted:
