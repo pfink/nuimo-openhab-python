@@ -31,6 +31,7 @@ Please add excerpts of your log files (nuimo-openhab.log and openhab.log) here. 
 - Operating System: [e.g. Raspian Stretch] (can be captured by running "lsb_release -a")
 - Python Version: [e.g. 3.5.3] (can be captured by running "python3 --version")
 - openHAB Version: [e.g. 2.5.0] (can be captured by running "openhab-cli info")
+- Bluez Version: [e.g. 5.43] (can be captured by running "bluetoothd --version")
 - Nuimo openHAB Python Version: [e.g. 1.0] (can be captured by running "git describe --tags" within the applications path)
 
 **Additional context**
