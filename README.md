@@ -6,6 +6,10 @@
 
 An application based on [getsenic/nuimo-linux-python](https://github.com/getsenic/nuimo-linux-python) to use your Nuimo as a UI for openHAB!
 
+## Preparation
+
+Before you get started here, please update the firmware of your Nuimo to the latest version using the Android / iOS app by Senic. Afterwards, disconnect your Nuimo from this app.
+
 ## Installation (Linux only)
 
 1. Make sure bluez version 5.43 or higher  is installed. Normally, you can check your bluez version by executing this command: `bluetoothd --version`.
