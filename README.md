@@ -1,6 +1,6 @@
 # Nuimo openHAB Integration
 
-[![Actively Maintained](https://maintained.tech/badge.svg)](https://maintained.tech/)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Join the chat at https://gitter.im/nuimo-openhab-python/Lobby](https://badges.gitter.im/nuimo-openhab-python/Lobby.svg)](https://gitter.im/nuimo-openhab-python/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![codebeat badge](https://codebeat.co/badges/7cf5a386-927c-4df9-b5e0-738637d9bb0c)](https://codebeat.co/projects/github-com-pfink-nuimo-openhab-python-master)
 
