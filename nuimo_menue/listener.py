@@ -91,7 +91,7 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
         logging.info("Connecting succeeded!")
 
     def connect_failed(self, error):
-        logging.info("Connecting failed!")
+        logging.info("Connecting just failed, anyhow reattempts will may do the job!")
 
     def started_disconnecting(self):
         logging.info("Disconnecting...")
