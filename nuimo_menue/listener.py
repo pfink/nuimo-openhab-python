@@ -88,7 +88,7 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
 
     def connect_succeeded(self):
         self.connected = True
-        logging.info("Connecting succeeded!")
+        logging.info("Connecting succeeded! Connected to Nuimo with firmware version %s", self.get_firmware_version())
 
     def connect_failed(self, error):
         logging.info("Connecting just failed, anyhow reattempts will may do the job!")
@@ -106,6 +106,18 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
             time.sleep(5)
             self.nuimoMenue.reconnect()
 
+    def get_firmware_version(self):
+        device_information_service = next(
+            s for s in self.nuimoMenue.controller.services
+            if s.uuid == '0000180a-0000-1000-8000-00805f9b34fb')
+
+        firmware_version_characteristic = next(
+            c for c in device_information_service.characteristics
+            if c.uuid == '00002a26-0000-1000-8000-00805f9b34fb')
+        logging.info(firmware_version_characteristic.read_value())
+
+        value = firmware_version_characteristic.read_value()
+        return bytes(value).decode('utf-8')
 
     def wheelNavigation(self, event):
         valueChange = event.value / 30
