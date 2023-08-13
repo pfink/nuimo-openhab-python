@@ -114,7 +114,6 @@ class NuimoMenueControllerListener(nuimo.ControllerListener):
         firmware_version_characteristic = next(
             c for c in device_information_service.characteristics
             if c.uuid == '00002a26-0000-1000-8000-00805f9b34fb')
-        logging.info(firmware_version_characteristic.read_value())
 
         value = firmware_version_characteristic.read_value()
         return bytes(value).decode('utf-8')
