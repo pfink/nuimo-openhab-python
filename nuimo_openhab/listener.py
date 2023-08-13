@@ -68,7 +68,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
 
                 # Special handling for TOGGLE: Resolve state first to be able showing the correct action icon
                 if command == "TOGGLE":
-                    state = requests.get(self.openhab.base_url + "/items/" + widget["item"]["name"] + "/state").text
+                    state = self.openhab.get_item(widget["item"]["name"]).state
                     if state in config["toggle_mapping"]:
                         command = str(config["toggle_mapping"][state])
                     elif state == "NULL" and widget["item"]["type"] in config["initial_command"]:
@@ -119,17 +119,18 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                 # Take care that the slider status shown on the LED matrix
                 # and used for calculating the new slider state is not older than 3s
                 self.openhab.req_post("/items/" + widget["item"]["name"], "REFRESH")
-                logging.debug(self.openhab.base_url + widget["item"]["name"] + "/state")
-                itemStateRaw = requests.get(self.openhab.base_url + "/items/" + widget["item"]["name"] + "/state").text
-                if(itemStateRaw == "NULL"):
-                    itemStateRaw = config["initial_command"]["Dimmer"]
-                currentState = float(itemStateRaw)
+                logging.debug("New Rotation Action" + widget["item"]["name"] + "/state")
+                item = self.openhab.get_item(widget["item"]["name"])
+                if(item.is_state_null() or item.is_state_undef()):
+                    currentState = config["initial_command"]["Dimmer"]
+                else:
+                    currentState = float(item.state)
                 if currentState <= 0:
                     currentState = 0
                 elif currentState < 1:
                     currentState *= 100
                 self.lastSliderState = int(currentState)
-                logging.debug("Raw item state: "+itemStateRaw)
+                logging.debug("Item State: "+ str(item.state))
 
             if abs(self.reminder) >= 1:
                 logging.debug("Old state: " + str(self.lastSliderState))
