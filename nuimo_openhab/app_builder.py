@@ -5,7 +5,7 @@ from nuimo_openhab.listener import *
 
 
 class OpenHabAppBuilder:
-    def __init__(self, openhab : openHAB, sitemapName = "nuimo"):
+    def __init__(self, openhab : OpenHAB, sitemapName = "nuimo"):
         self.openhab = openhab
         self.sitemapName = sitemapName
         self.sitemap = dict()

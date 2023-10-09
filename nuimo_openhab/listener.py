@@ -6,7 +6,7 @@ from nuimo_openhab.util.threading import synchronized
 
 import nuimo
 import requests
-from openhab import openHAB
+from openhab import OpenHAB
 
 import nuimo_menue
 from nuimo_openhab.util import config
@@ -14,7 +14,7 @@ from nuimo_openhab.util import config
 
 class OpenHabItemListener(nuimo_menue.model.AppListener):
 
-    def __init__(self, openhab: openHAB):
+    def __init__(self, openhab: OpenHAB):
         self.openhab = openhab
         self.widgets = []
         self.sliderWidgets = []
