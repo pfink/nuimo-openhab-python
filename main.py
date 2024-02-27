@@ -11,7 +11,7 @@ class Main:
 
     def run(self):
         try:
-            self.openhab = openHAB(config["openhab_api_url"])
+            self.openhab = OpenHAB(config["openhab_api_url"])
             self.app_builder = OpenHabAppBuilder(self.openhab, config["openhab_sitemap"])
 
             manager = nuimo.ControllerManager(adapter_name=config["bluetooth_adapter"])
