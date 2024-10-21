@@ -12,7 +12,7 @@ An application based on [getsenic/nuimo-linux-python](https://github.com/getseni
 1. Download the latest release to your machine: `git clone --recurse-submodules https://github.com/pfink/nuimo-openhab-python -b latest-release`
 1. Create a copy of *config.example.yml* with the name *config.yml*: `cd nuimo-openhab-python && cp config.example.yml config.yml`
 1. Install dependencies (the following commands are examples for a Debian-based system, they may differ on other Linux distributions):
-    1. `apt-get install python3-pip python3-dbus python3-gi python3-yaml python3-cryptography`
+    1. `apt-get install python3-pip python3-dbus python3-gi python3-yaml python3-cryptography libssl-dev`
     1. `pip3 install -r requirements.txt`
     
 Optionally, you can move config.yml to another location (e.g. */etc/nuimo-openhab/config.yml*). If you do so, you have to specify that path via the environment variable `NUIMO_OPENHAB_CONFIG_PATH`.
