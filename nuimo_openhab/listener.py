@@ -122,7 +122,7 @@ class OpenHabItemListener(nuimo_menue.model.AppListener):
                 logging.debug("New Rotation Action" + widget["item"]["name"] + "/state")
                 item = self.openhab.get_item(widget["item"]["name"])
                 if(item.is_state_null() or item.is_state_undef()):
-                    currentState = config["initial_command"]["Dimmer"]
+                    currentState = float(config["initial_command"]["Dimmer"])
                 else:
                     currentState = float(item.state)
                 if currentState <= 0:
