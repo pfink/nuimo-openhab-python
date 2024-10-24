@@ -15,6 +15,7 @@ An application based on [getsenic/nuimo-linux-python](https://github.com/getseni
     1. `apt-get install python3-pip python3-dbus python3-gi python3-yaml python3-cryptography libssl-dev`
     1. `python3 -m venv nuimo-python-venv --system-site-packages`
     1. `source nuimo-python-venv/bin/activate`
+    1. `pip3 install --upgrade pip` 
     1. `pip3 install -r requirements.txt`
     
 Optionally, you can move config.yml to another location (e.g. */etc/nuimo-openhab/config.yml*). If you do so, you have to specify that path via the environment variable `NUIMO_OPENHAB_CONFIG_PATH`.
